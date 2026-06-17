@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes, viewport-fit=cover">
+  <title>🌞 Echo的暑期打卡</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: linear-gradient(150deg, #fbe9b1 0%, #f7cf7c 100%);
+      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+      min-height: 100vh; padding: 1.5rem 1rem;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+    }
+    .container {
+      max-width: 800px; width: 100%; background: rgba(255,252,242,0.92);
+      backdrop-filter: blur(18px); border-radius: 2.8rem; padding: 1.8rem 1.6rem;
+      box-shadow: 0 30px 45px rgba(180,110,20,0.2); border: 2px solid #ffeac5;
+    }
+    h1 { font-size: 2.2rem; text-align: center; color: #5a3b1c; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: 2px; }
+    .summer-badge { text-align: center; font-weight: 600; color: #c4461c; background: #fff3db; border-radius: 2rem; padding: 0.3rem 1rem; margin: 0.5rem auto 0.8rem; width: fit-content; font-size: 0.9rem; }
+    .date-box { background: #fff7e7; border-radius: 3rem; padding: 0.6rem 1.2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.8rem; margin: 1.2rem 0 1rem; font-weight: 600; border: 1px solid #dfbc7c; }
+    .date-nav { display: flex; align-items: center; gap: 0.4rem; }
+    .date-nav button, #todayBtn { background: #f7e1b9; border: 1px solid #cb9e5a; border-radius: 2rem; padding: 0.45rem 1.2rem; font-weight: bold; cursor: pointer; transition: 0.2s; color: #4d2e0e; }
+    .date-nav button:hover, #todayBtn:hover { background: #f5cd82; }
+    .date-nav button:disabled { opacity: 0.5; cursor: not-allowed; background: #ece1c6; }
+    #currentDateDisplay { min-width: 110px; text-align: center; font-size: 1.2rem; background: #ffffffc7; padding: 0.35rem 0.8rem; border-radius: 2rem; }
+    .weekday-tip { background: #d9eafb; border-radius: 2rem; padding: 0.5rem 1.2rem; margin-bottom: 1rem; font-weight: 600; color: #1e4660; display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; }
+    .timer-panel { background: #fef5e7; border-radius: 2rem; padding: 0.8rem 1.2rem; margin: 0.8rem 0; display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; border: 1px solid #e7c284; }
+    .timer-display { font-size: 2rem; font-weight: 700; font-family: monospace; background: #fff; padding: 0.3rem 1rem; border-radius: 2rem; min-width: 110px; text-align: center; }
+    .timer-display.alarm { animation: blink 0.5s ease-in-out 6; background: #ffe0e0; color: #cc0000; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .timer-controls { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .timer-btn { background: #f3d89e; border: 1px solid #c99c4b; border-radius: 2rem; padding: 0.4rem 1rem; font-weight: bold; cursor: pointer; white-space: nowrap; font-size: 0.85rem; }
+    .timer-btn:hover { background: #ecc477; }
+    .task-list { display: flex; flex-direction: column; gap: 0.9rem; margin: 1.2rem 0; }
+    .task-card { background: #ffffffeb; border-radius: 1.8rem; padding: 0.7rem 1rem; border: 1px solid #f5d59c; box-shadow: 0 6px 14px rgba(140,90,20,0.08); transition: background 0.25s; }
+    .task-card.completed-card { background: #d4edc9; border-color: #8bbf6f; }
+    .task-card.incomplete-card { background: #ffe0d4; border-color: #e0977a; }
+    .task-main-row { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+    .task-index { font-weight: 800; font-size: 1.1rem; background: #fde5bd; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #4d2f10; flex-shrink: 0; }
+    .task-details { flex: 2; min-width: 120px; }
+    .task-title { font-weight: 700; font-size: 1rem; color: #422c15; }
+    .task-desc { font-size: 0.75rem; color: #704e2c; background: rgba(255,255,240,0.7); padding: 0.15rem 0.6rem; border-radius: 1rem; display: inline-block; }
+    .time-input-area { display: flex; align-items: center; gap: 0.3rem; }
+    .time-input { width: 60px; padding: 0.3rem; border-radius: 1.2rem; border: 1px solid #dbaa5e; background: #fffbf2; text-align: center; font-weight: 600; }
+    .check-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #e6b56b; background: #fff4e0; font-size: 1.6rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; color: #ad7a42; font-weight: bold; flex-shrink: 0; }
+    .check-btn.completed { background: #8bc34a; border-color: #5a8625; color: white; }
+    .math-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed #e0c78a; }
+    .math-preview-inline { display: none; background: #f8fdf0; border-radius: 1.2rem; padding: 0.8rem; margin-top: 0.5rem; border: 1px dashed #a3c97a; }
+    .math-preview-inline.show { display: block; }
+    .math-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; }
+    .math-item { background: white; padding: 0.4rem; text-align: center; border-radius: 0.6rem; font-size: 0.8rem; font-weight: 600; border: 1px solid #d4e7b5; }
+    .progress-box { background: #fbf3df; border-radius: 2rem; padding: 1rem 1.3rem; margin: 1rem 0; }
+    .progress-header { display: flex; justify-content: space-between; font-weight: 700; }
+    .bar-bg { height: 18px; background: #e8d5b0; border-radius: 20px; margin: 0.5rem 0; overflow: hidden; }
+    .bar-fill { width: 0%; height: 100%; background: #f6a64d; transition: 0.3s; }
+    .action-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn { background: #fce3b4; border: 1px solid #c99c4b; padding: 0.65rem 1.5rem; border-radius: 2.5rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
+    .btn:hover { background: #f5c979; }
+    .analysis-panel { background: #fff5e3; border-radius: 2rem; padding: 1.2rem; margin-top: 1rem; border: 1px dashed #c7a154; display: none; }
+    .analysis-panel.show { display: block; }
+    .month-selector { display: flex; gap: 0.5rem; align-items: center; margin: 0.8rem 0; }
+    .task-filter { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.8rem 0; }
+    .filter-chip { background: #f3e0bc; border: 1px solid #caa25b; border-radius: 2rem; padding: 0.3rem 0.8rem; font-size: 0.75rem; cursor: pointer; transition: 0.2s; user-select: none; }
+    .filter-chip.active { background: #f6b83d; color: white; border-color: #b46f1c; }
+    .filter-chip.all-chip { background: #ffe9c7; font-weight: 700; }
+    .filter-chip.all-chip.active { background: #f28c38; color: white; }
+    canvas { width: 100%; max-height: 280px; margin-top: 0.5rem; background: #fffef7; border-radius: 1.2rem; }
+    .legend { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 0.5rem 0; font-size: 0.75rem; }
+    .legend-item { display: flex; align-items: center; gap: 0.3rem; }
+    .legend-color { width: 14px; height: 14px; border-radius: 4px; }
+  </style>
+</head>
+<body>
+<div class="container" id="mainContainer">
+  <h1>🌻 Echo的暑期打卡</h1>
+  <div class="summer-badge">📆 暑假专属 · 7月1日 - 8月31日</div>
+  <div class="date-box">
+    <span>📅</span>
+    <div class="date-nav"><button id="prevDay">◀</button><span id="currentDateDisplay"></span><button id="nextDay">▶</button></div>
+    <button id="todayBtn">📌 今天</button>
+  </div>
+  <div id="weekdayReminder" class="weekday-tip"></div>
+  <div class="timer-panel">
+    <span style="font-weight:700;">⏳ 计时器</span>
+    <span class="timer-display" id="timerDisplay">00:00</span>
+    <div class="timer-controls">
+      <button class="timer-btn" id="timerStartBtn">▶ 开始</button>
+      <button class="timer-btn" id="timerPauseBtn">⏸️ 暂停</button>
+      <button class="timer-btn" id="timerResetBtn">↺ 重置</button>
+    </div>
+    <div style="display:flex; gap:0.5rem; align-items:center;">
+      <span>倒计时</span><input type="number" id="countdownInput" placeholder="分钟" min="1" value="20" style="width:60px; padding:0.3rem; border-radius:1rem; border:1px solid #ccc;">
+      <button class="timer-btn" id="countdownBtn">⏲️ 开始倒计时</button>
+    </div>
+  </div>
+  <div id="taskListContainer" class="task-list"></div>
+  <div class="progress-box">
+    <div class="progress-header"><span>✅ 今日进度</span><span id="progressText">0/11</span></div>
+    <div class="bar-bg"><div id="progressFill" class="bar-fill" style="width:0%"></div></div>
+  </div>
+  <div class="action-row">
+    <button class="btn" id="analysisBtn">📊 月度分析</button>
+    <button class="btn" id="resetTodayBtn">🔄 重置今日</button>
+  </div>
+  <div id="analysisPanel" class="analysis-panel">
+    <div class="month-selector"><button id="prevMonthBtn">◀</button><strong id="analysisMonthLabel"></strong><button id="nextMonthBtn">▶</button></div>
+    <div id="monthSummary"></div>
+    <div class="task-filter" id="taskFilterContainer"></div>
+    <div class="legend" id="legendContainer"></div>
+    <canvas id="monthChart"></canvas>
+  </div>
+  <div style="text-align:center; margin-top:0.8rem; color:#5e3f22;">☀️ 户外至少3小时 · 坚持就是胜利</div>
+</div>
+
+<script>
+(function() {
+  const SUMMER_START='2026-07-01', SUMMER_END='2026-08-31';
+  const BASE_TASKS=[{id:'english_read',title:'英语阅读',desc:'1-2本原版书',emoji:'📖'},{id:'english_cartoon',title:'英语动画',desc:'20分钟以内',emoji:'📺'},{id:'english_listening',title:'英语听力',desc:'30分钟',emoji:'🎧'},{id:'chinese_read_1',title:'语文阅读(一)',desc:'20分钟',emoji:'📘'},{id:'chinese_read_2',title:'语文阅读(二)',desc:'20分钟',emoji:'📘'},{id:'chinese_write_1',title:'汉字书写(一)',desc:'20分钟',emoji:'✍️'},{id:'chinese_write_2',title:'汉字书写(二)',desc:'20分钟',emoji:'✍️'},{id:'writing_video',title:'书法视频',desc:'20分钟',emoji:'🎬'},{id:'math_practice',title:'数学运算',desc:'100以内加减法·20分钟',emoji:'🧮'},{id:'jump_rope',title:'跳绳',desc:'20分钟',emoji:'🪢'},{id:'outdoor',title:'户外活动',desc:'至少3小时',emoji:'🌳'}];
+  const OUTCLASS_TASK={id:'english_outclass',title:'英语外教课',desc:'25分钟',emoji:'🎓'}, OUTCLASS_DAYS=[1,2];
+  const TASK_COLORS=['#e74c3c','#3498db','#9b59b6','#2ecc71','#f39c12','#1abc9c','#e67e22','#2980b9','#c0392b','#27ae60','#8e44ad','#d35400'];
+  const OUTCLASS_TIME={1:'🎓 英语外教课 19:30–19:55',2:'🎓 英语外教课 18:30–18:55'};
+  const STORAGE_DATA='echo_v27', MATH_STORAGE_KEY='math_v20';
+  let currentDateStr=getTodayString(), analysisYearMonth='2026-07', selectedTaskFilters=['all'], timerInterval=null, timerSeconds=0, mathProblems=[];
+  const AudioContext=window.AudioContext||window.webkitAudioContext; let audioCtx=null;
+
+  function formatDuration(min){if(min<60)return min+'分钟';let h=Math.floor(min/60),m=min%60;return m>0?h+'小时'+m+'分钟':h+'小时';}
+  function playGreatSound(){if(!audioCtx)audioCtx=new AudioContext();let now=audioCtx.currentTime;[0,0.15,0.3].forEach((d,i)=>{let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';let t=now+d;o.frequency.setValueAtTime(600+i*200,t);o.frequency.exponentialRampToValueAtTime(900+i*200,t+0.1);g.gain.setValueAtTime(0.25,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.2);o.start(t);o.stop(t+0.2);});}
+  function playUncheckSound(){if(!audioCtx)audioCtx=new AudioContext();let now=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(600,now);o.frequency.exponentialRampToValueAtTime(400,now+0.15);g.gain.setValueAtTime(0.2,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.2);o.start(now);o.stop(now+0.2);}
+  function playAlarmSound(){if(!audioCtx)audioCtx=new AudioContext();let now=audioCtx.currentTime;for(let i=0;i<6;i++){let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='square';let t=now+i*0.4;o.frequency.setValueAtTime(880,t);o.frequency.setValueAtTime(660,t+0.15);g.gain.setValueAtTime(0.15,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.35);o.start(t);o.stop(t+0.35);}}
+
+  function getTodayString(){let t=new Date(),s=formatDate(t);return s<SUMMER_START?SUMMER_START:s>SUMMER_END?SUMMER_END:s;}
+  function formatDate(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
+  function isDateInSummer(s){return s>=SUMMER_START&&s<=SUMMER_END;}
+  function getWeekday(d){return new Date(d+'T00:00:00').getDay();}
+  function getTodayTasks(){let w=getWeekday(currentDateStr),t=[...BASE_TASKS];if(OUTCLASS_DAYS.includes(w))t.splice(3,0,OUTCLASS_TASK);return t;}
+
+  const storage={load(){try{return JSON.parse(localStorage.getItem(STORAGE_DATA))||{};}catch{return{};}},save(d){localStorage.setItem(STORAGE_DATA,JSON.stringify(d));},getDay(d){return this.load()[d]||{tasks:{}};},set(d,id,c,m){if(!isDateInSummer(d))return;let a=this.load();if(!a[d])a[d]={tasks:{}};a[d].tasks[id]={completed:c,minutes:m||0};this.save(a);},resetDay(d){let a=this.load();delete a[d];this.save(a);}};
+  function getMathHistory(){try{return JSON.parse(localStorage.getItem(MATH_STORAGE_KEY))||{};}catch{return{};}}
+  function saveMathHistory(h){localStorage.setItem(MATH_STORAGE_KEY,JSON.stringify(h));}
+  function getMathForDate(d){let h=getMathHistory();return h[d]||null;}
+  function saveMathForDate(d,p){let h=getMathHistory();h[d]=p;saveMathHistory(h);}
+  function generateRandomProblems(){let p=[],s=new Set();while(p.length<40){let add=Math.random()>0.4,pr;if(add){let a=Math.floor(Math.random()*90)+5,b=Math.floor(Math.random()*(100-a))+1;pr=a+' + '+b+' = ____';}else{let a=Math.floor(Math.random()*99)+2,b=Math.floor(Math.random()*(a-1))+1;pr=a+' - '+b+' = ____';}if(!s.has(pr)){s.add(pr);p.push(pr);}}return p;}
+  function generateUniqueProblems(d){let s=getMathForDate(d);if(s&&s.length===40)return[...s];let p=generateRandomProblems();saveMathForDate(d,p);return p;}
+  function regenerateProblems(){let p=generateRandomProblems();saveMathForDate(currentDateStr,p);mathProblems=p;renderMathInline();}
+
+  const $=id=>document.getElementById(id);
+  const dateDisplay=$('currentDateDisplay'),taskContainer=$('taskListContainer'),progressText=$('progressText'),progressFill=$('progressFill'),weekdayReminder=$('weekdayReminder'),analysisPanel=$('analysisPanel'),analysisMonthLabel=$('analysisMonthLabel'),monthSummary=$('monthSummary'),chartCanvas=$('monthChart'),taskFilterContainer=$('taskFilterContainer'),legendContainer=$('legendContainer'),timerDisplay=$('timerDisplay'),prevBtn=$('prevDay'),nextBtn=$('nextDay');
+
+  function updateTimerDisplay(){let m=Math.floor(timerSeconds/60),s=timerSeconds%60;timerDisplay.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
+  function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;}timerDisplay.classList.remove('alarm');}
+  function startTimer(){stopTimer();timerInterval=setInterval(()=>{timerSeconds++;updateTimerDisplay();},1000);}
+  function pauseTimer(){stopTimer();}
+  function resetTimer(){stopTimer();timerSeconds=0;timerDisplay.classList.remove('alarm');updateTimerDisplay();}
+  function startCountdown(min){stopTimer();timerSeconds=min*60;updateTimerDisplay();timerInterval=setInterval(()=>{if(timerSeconds<=0){stopTimer();timerDisplay.classList.add('alarm');playAlarmSound();setTimeout(()=>timerDisplay.classList.remove('alarm'),3000);return;}timerSeconds--;updateTimerDisplay();},1000);}
+
+  $('timerStartBtn').addEventListener('click',startTimer);$('timerPauseBtn').addEventListener('click',pauseTimer);$('timerResetBtn').addEventListener('click',resetTimer);
+  $('countdownBtn').addEventListener('click',()=>{let m=parseInt($('countdownInput').value,10);if(m>0)startCountdown(m);});
+
+  function renderMathInline(){let g=document.getElementById('mathGridInline');if(!g)return;g.innerHTML='';mathProblems.forEach(p=>{let d=document.createElement('div');d.className='math-item';d.textContent=p;g.appendChild(d);});}
+
+  function directPrint(){
+    // 创建独立的打印窗口
+    let w = window.open('','_blank','width=800,height=600');
+    let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>数学练习题</title><style>';
+    html += '@page { size: A4; margin: 12mm; }';
+    html += 'body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; margin:0; padding:15px; }';
+    html += 'h2 { text-align:center; font-size:18px; margin-bottom:6px; }';
+    html += '.info { text-align:center; font-size:13px; margin-bottom:12px; }';
+    html += '.grid { display:grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }';
+    html += '.item { padding:8px 4px; border:1px solid #999; text-align:center; font-size:14px; border-radius:3px; }';
+    html += '</style></head><body>';
+    html += '<h2>🧮 数学运算练习（100以内）</h2>';
+    html += '<div class="info">姓名：__________ 日期：__________ 用时：__________</div>';
+    html += '<div class="grid">';
+    mathProblems.forEach(p => { html += '<div class="item">'+p+'</div>'; });
+    html += '</div></body></html>';
+    
+    w.document.write(html);
+    w.document.close();
+    w.focus();
+    setTimeout(()=>{ w.print(); }, 500);
+  }
+
+  function updateNavButtons(){prevBtn.disabled=(currentDateStr<=SUMMER_START);nextBtn.disabled=(currentDateStr>=SUMMER_END);}
+  function renderReminder(){let w=getWeekday(currentDateStr),t=OUTCLASS_TIME[w]||'';weekdayReminder.style.display=t?'flex':'none';if(t)weekdayReminder.innerHTML='📌 今日安排：<strong>'+t+'</strong> (别忘记哦)';}
+
+  function renderTasks(){
+    let dayData=storage.getDay(currentDateStr),tasksState=dayData.tasks||{},todayTasks=getTodayTasks();taskContainer.innerHTML='';
+    todayTasks.forEach((task,idx)=>{
+      let state=tasksState[task.id]||{completed:false,minutes:0},completed=state.completed===true,minutes=state.minutes||0,isMath=task.id==='math_practice',isOut=task.id==='english_outclass';
+      let card=document.createElement('div');card.className='task-card '+(completed?'completed-card':'incomplete-card');
+      card.innerHTML='<div class="task-main-row"><div class="task-index">'+(idx+1)+'</div><div class="task-details"><div class="task-title">'+task.emoji+' '+task.title+(isOut?' <span style="font-size:0.7rem;color:#c4461c;">(仅周一/周二)</span>':'')+'</div><div class="task-desc">'+task.desc+'</div></div><div class="time-input-area"><input type="number" class="time-input" placeholder="分钟" value="'+(minutes||'')+'" min="0" step="1" data-task-id="'+task.id+'"><span style="font-size:0.7rem;">分钟</span></div><button class="check-btn '+(completed?'completed':'')+'" data-task-id="'+task.id+'">'+(completed?'✓':'○')+'</button></div>'+(isMath?'<div class="math-actions"><button class="timer-btn math-preview-btn">👁️ 预览</button><button class="timer-btn math-regenerate-btn">🎲 换题</button><button class="timer-btn math-print-btn">🖨️ 直接打印</button></div><div class="math-preview-inline"><div class="math-grid" id="mathGridInline"></div></div>':'');
+      let checkBtn=card.querySelector('.check-btn'),timeInput=card.querySelector('.time-input');
+      checkBtn.addEventListener('click',e=>{e.stopPropagation();let nc=!completed;storage.set(currentDateStr,task.id,nc,parseInt(timeInput.value,10)||0);nc?playGreatSound():playUncheckSound();renderAll();});
+      timeInput.addEventListener('change',()=>{storage.set(currentDateStr,task.id,completed,parseInt(timeInput.value,10)||0);renderAll();});
+      if(isMath){
+        let pBtn=card.querySelector('.math-preview-btn'),rBtn=card.querySelector('.math-regenerate-btn'),prBtn=card.querySelector('.math-print-btn'),pv=card.querySelector('.math-preview-inline');
+        pBtn.addEventListener('click',e=>{e.stopPropagation();pv.classList.toggle('show');if(pv.classList.contains('show'))renderMathInline();});
+        rBtn.addEventListener('click',e=>{e.stopPropagation();regenerateProblems();if(pv.classList.contains('show'))renderMathInline();rBtn.style.background='#a8e6a3';setTimeout(()=>rBtn.style.background='',500);});
+        prBtn.addEventListener('click',e=>{e.stopPropagation();directPrint();});
+      }
+      taskContainer.appendChild(card);
+    });
+    let cc=todayTasks.filter(t=>tasksState[t.id]?.completed).length;progressText.textContent=cc+'/'+todayTasks.length;progressFill.style.width=(cc/todayTasks.length*100)+'%';
+  }
+
+  function renderAll(){dateDisplay.textContent=currentDateStr.slice(0,4)+'年'+currentDateStr.slice(5,7)+'月'+currentDateStr.slice(8,10)+'日';updateNavButtons();renderReminder();mathProblems=generateUniqueProblems(currentDateStr);renderTasks();}
+  function changeDate(d){let dt=new Date(currentDateStr+'T00:00:00');dt.setDate(dt.getDate()+d);let ns=formatDate(dt);if(isDateInSummer(ns)){currentDateStr=ns;renderAll();}}
+  $('prevDay').addEventListener('click',()=>changeDate(-1));$('nextDay').addEventListener('click',()=>changeDate(1));$('todayBtn').addEventListener('click',()=>{currentDateStr=getTodayString();renderAll();});
+  $('resetTodayBtn').addEventListener('click',()=>{if(confirm('重置今日所有打卡和时间？')){storage.resetDay(currentDateStr);renderAll();}});
+
+  function getMonthDays(y,m){let d=new Date(y,m,0).getDate();return Array.from({length:d},(_,i)=>y+'-'+String(m).padStart(2,'0')+'-'+String(i+1).padStart(2,'0')).filter(isDateInSummer);}
+  function drawMultiChart(dates,dataSeries){
+    if(!chartCanvas||dates.length===0)return;let ctx=chartCanvas.getContext('2d');chartCanvas.width=Math.max(400,window.innerWidth*0.8);chartCanvas.height=260;ctx.clearRect(0,0,chartCanvas.width,260);
+    let pad={top:30,right:20,bottom:35,left:45},cw=chartCanvas.width-pad.left-pad.right,ch=260-pad.top-pad.bottom,gm=1;dataSeries.forEach(s=>{let m=Math.max(...s.values,0);if(m>gm)gm=m;});
+    ctx.strokeStyle='#e0d5c0';ctx.lineWidth=0.5;for(let i=0;i<=4;i++){let y=pad.top+(ch/4)*i;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(chartCanvas.width-pad.right,y);ctx.stroke();ctx.fillStyle='#8b7355';ctx.font='10px sans-serif';ctx.fillText(Math.round(gm*(4-i)/4),5,y+4);}
+    dataSeries.forEach(series=>{if(dates.length===0)return;let bw=Math.max(4,cw/dates.length-3);ctx.fillStyle=series.color;ctx.strokeStyle=series.color;ctx.lineWidth=1.5;ctx.beginPath();dates.forEach((d,i)=>{let x=pad.left+i*(bw+3)+bw/2,h=(series.values[i]/gm)*ch,y=pad.top+ch-h;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});ctx.stroke();dates.forEach((d,i)=>{let x=pad.left+i*(bw+3)+bw/2,h=(series.values[i]/gm)*ch,y=pad.top+ch-h;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();});});
+    ctx.fillStyle='#3d2b12';ctx.font='9px sans-serif';dates.forEach((d,i)=>{if(i%Math.ceil(dates.length/15)===0){let bw=Math.max(4,cw/dates.length-3),x=pad.left+i*(bw+3)+bw/2;ctx.fillText(d.slice(-2),x-6,255);}});ctx.fillStyle='#3d2b12';ctx.font='bold 10px sans-serif';ctx.fillText('分钟',8,18);
+  }
+
+  function updateAnalysis(){
+    let [y,m]=analysisYearMonth.split('-').map(Number);analysisMonthLabel.textContent=y+'年'+m+'月';let dates=getMonthDays(y,m),all=storage.load(),summaryHTML='';
+    if(selectedTaskFilters.includes('all')){
+      let totalMin=0;
+      let values=dates.map(d=>{
+        let tasks=all[d]?.tasks||{},w=getWeekday(d),dt=OUTCLASS_DAYS.includes(w)?[...BASE_TASKS,OUTCLASS_TASK]:BASE_TASKS,dayMin=0;
+        dt.forEach(t=>{let m=tasks[t.id]?.minutes||0;dayMin+=m;});
+        totalMin+=dayMin;
+        return dt.filter(t=>tasks[t.id]?.completed).length;
+      });
+      let sum=values.reduce((a,b)=>a+b,0);
+      summaryHTML='📋 本月打卡总次数：<strong>'+sum+'</strong> · 日均 '+(sum/dates.length||0).toFixed(1)+' 项<br>⏱️ 本月总时长：<strong>'+formatDuration(totalMin)+'</strong>（'+totalMin+'分钟）';
+      drawMultiChart(dates,[{label:'全部打卡',color:'#f28c38',values}]);
+      renderLegend([{label:'全部打卡',color:'#f28c38'}]);
+    }else{
+      let dataSeries=[],legendItems=[],totalAll=0;
+      selectedTaskFilters.forEach(tid=>{
+        let task=[...BASE_TASKS,OUTCLASS_TASK].find(t=>t.id===tid);if(!task)return;
+        let values=dates.map(d=>all[d]?.tasks?.[tid]?.minutes||0),sum=values.reduce((a,b)=>a+b,0);totalAll+=sum;
+        let col=TASK_COLORS[[...BASE_TASKS,OUTCLASS_TASK].indexOf(task)%TASK_COLORS.length];
+        dataSeries.push({label:task.title,color:col,values});legendItems.push({label:task.emoji+' '+task.title,color:col});
+      });
+      summaryHTML='⏱️ 选中任务合计：<strong>'+formatDuration(totalAll)+'</strong>（'+totalAll+'分钟） · 共 '+selectedTaskFilters.length+' 项';
+      drawMultiChart(dates,dataSeries);renderLegend(legendItems);
+    }
+    monthSummary.innerHTML=summaryHTML;renderFilters();
+  }
+
+  function renderLegend(items){legendContainer.innerHTML='';items.forEach(i=>{let d=document.createElement('div');d.className='legend-item';d.innerHTML='<div class="legend-color" style="background:'+i.color+'"></div><span>'+i.label+'</span>';legendContainer.appendChild(d);});}
+  function toggleFilter(fid){if(fid==='all'){selectedTaskFilters=['all'];}else{selectedTaskFilters=selectedTaskFilters.filter(f=>f!=='all');let i=selectedTaskFilters.indexOf(fid);i>-1?selectedTaskFilters.splice(i,1):selectedTaskFilters.push(fid);if(selectedTaskFilters.length===0)selectedTaskFilters=['all'];}updateAnalysis();}
+  function renderFilters(){taskFilterContainer.innerHTML='';let ac=document.createElement('span');ac.className='filter-chip all-chip'+(selectedTaskFilters.includes('all')?' active':'');ac.textContent='📋 全部打卡';ac.addEventListener('click',()=>toggleFilter('all'));taskFilterContainer.appendChild(ac);[...BASE_TASKS,OUTCLASS_TASK].forEach(t=>{let c=document.createElement('span');c.className='filter-chip'+(selectedTaskFilters.includes(t.id)?' active':'');c.textContent=t.emoji+' '+t.title;c.addEventListener('click',()=>toggleFilter(t.id));taskFilterContainer.appendChild(c);});}
+
+  $('analysisBtn').addEventListener('click',()=>{if(analysisPanel.classList.contains('show'))analysisPanel.classList.remove('show');else{analysisPanel.classList.add('show');updateAnalysis();}});
+  $('prevMonthBtn').addEventListener('click',()=>{analysisYearMonth=analysisYearMonth==='2026-07'?'2026-08':'2026-07';updateAnalysis();});
+  $('nextMonthBtn').addEventListener('click',()=>{analysisYearMonth=analysisYearMonth==='2026-07'?'2026-08':'2026-07';updateAnalysis();});
+
+  renderAll();
+})();
+</script>
+</body>
+</html>
