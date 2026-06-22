@@ -2,151 +2,348 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover, shrink-to-fit=no">
   <title>🌞 Echo的暑期打卡</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: linear-gradient(150deg, #fbe9b1 0%, #f7cf7c 100%);
-      font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
-      min-height: 100vh; padding: 1.5rem 1rem;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: linear-gradient(170deg, #fef9f0 0%, #fdf3e0 30%, #fce8cc 100%);
+      font-family: -apple-system, 'PingFang SC', 'Noto Sans', system-ui, sans-serif;
+      min-height: 100vh; min-height: -webkit-fill-available;
+      padding: 14px 10px 28px;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-font-smoothing: antialiased;
     }
     .container {
-      max-width: 800px; width: 100%; background: rgba(255,252,242,0.92);
-      backdrop-filter: blur(18px); border-radius: 2.8rem; padding: 1.8rem 1.6rem;
-      box-shadow: 0 30px 45px rgba(180,110,20,0.2); border: 2px solid #ffeac5;
+      max-width: 390px; width: 100%; background: #fffefb;
+      border-radius: 26px; padding: 20px 14px 16px;
+      box-shadow: 0 2px 12px rgba(140,100,40,0.06), 0 8px 32px rgba(140,100,40,0.10);
+      border: 1px solid rgba(230,200,150,0.3);
     }
-    h1 { font-size: 2.2rem; text-align: center; color: #5a3b1c; font-weight: 700; margin-bottom: 0.25rem; letter-spacing: 2px; }
-    .summer-badge { text-align: center; font-weight: 600; color: #c4461c; background: #fff3db; border-radius: 2rem; padding: 0.3rem 1rem; margin: 0.5rem auto 0.8rem; width: fit-content; font-size: 0.9rem; }
-    .date-box { background: #fff7e7; border-radius: 3rem; padding: 0.6rem 1.2rem; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.8rem; margin: 1.2rem 0 1rem; font-weight: 600; border: 1px solid #dfbc7c; }
-    .date-nav { display: flex; align-items: center; gap: 0.4rem; }
-    .date-nav button, #todayBtn { background: #f7e1b9; border: 1px solid #cb9e5a; border-radius: 2rem; padding: 0.45rem 1.2rem; font-weight: bold; cursor: pointer; transition: 0.2s; color: #4d2e0e; }
-    .date-nav button:hover, #todayBtn:hover { background: #f5cd82; }
-    .date-nav button:disabled { opacity: 0.5; cursor: not-allowed; background: #ece1c6; }
-    #currentDateDisplay { min-width: 110px; text-align: center; font-size: 1.2rem; background: #ffffffc7; padding: 0.35rem 0.8rem; border-radius: 2rem; }
-    .weekday-tip { background: #d9eafb; border-radius: 2rem; padding: 0.5rem 1.2rem; margin-bottom: 1rem; font-weight: 600; color: #1e4660; display: flex; align-items: center; gap: 0.5rem; font-size: 0.95rem; }
-    .timer-panel { background: #fef5e7; border-radius: 2rem; padding: 0.8rem 1.2rem; margin: 0.8rem 0; display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; border: 1px solid #e7c284; }
-    .timer-display { font-size: 2rem; font-weight: 700; font-family: monospace; background: #fff; padding: 0.3rem 1rem; border-radius: 2rem; min-width: 110px; text-align: center; }
-    .timer-display.alarm { animation: blink 0.5s ease-in-out 6; background: #ffe0e0; color: #cc0000; }
+    h1 { font-size: 1.2rem; text-align: center; color: #3d2815; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; }
+    .summer-badge { text-align: center; font-weight: 600; color: #b8753e; background: linear-gradient(135deg, #fef5e8, #fde8cc); border-radius: 10px; padding: 3px 12px; margin: 5px auto 10px; width: fit-content; font-size: 0.7rem; }
+    .date-box { background: linear-gradient(135deg, #fefaf3, #fdf3e0); border-radius: 16px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; gap: 6px; margin: 8px 0 10px; border: 1px solid #ecd9b0; }
+    .date-nav { display: flex; align-items: center; gap: 2px; }
+    .date-nav button, #todayBtn { background: #fffefb; border: 1px solid #d4b87a; border-radius: 10px; padding: 5px 10px; font-weight: 600; cursor: pointer; font-size: 0.7rem; color: #5c3d1e; }
+    .date-nav button:disabled { opacity: 0.3; }
+    #currentDateDisplay { min-width: 88px; text-align: center; font-size: 0.82rem; font-weight: 700; color: #3d2815; }
+    .weekday-tip { background: linear-gradient(135deg, #e8f0fa, #dbe8f5); border-radius: 12px; padding: 7px 10px; margin-bottom: 7px; font-weight: 600; color: #3a5a8c; display: flex; align-items: center; gap: 5px; font-size: 0.74rem; border: 1px solid #c8daf0; }
+    .dance-tip { background: linear-gradient(135deg, #fde8f0, #fad4e2); border-radius: 12px; padding: 7px 10px; margin-bottom: 7px; font-weight: 600; color: #7a3050; display: flex; align-items: center; gap: 5px; font-size: 0.74rem; border: 1px solid #f0c0d5; }
+
+    .timer-panel {
+      background: linear-gradient(135deg, #fffefb, #fef8ee); border-radius: 18px; padding: 12px 12px;
+      margin: 8px 0 12px; border: 1px solid #e8d5b0; box-shadow: 0 2px 8px rgba(140,100,40,0.06);
+    }
+    .timer-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
+    .timer-row:last-child { margin-bottom: 0; }
+    .timer-left { display: flex; align-items: center; flex-shrink: 0; }
+    .timer-label { font-weight: 700; font-size: 0.76rem; color: #5c3d1e; white-space: nowrap; margin-right: 6px; }
+    .timer-label-2 { font-weight: 700; font-size: 0.76rem; color: #5c3d1e; white-space: nowrap; margin-right: 8px; }
+    .timer-display-box {
+      font-size: 1.5rem; font-weight: 700; font-family: 'SF Mono', 'SF Pro Display', 'Menlo', monospace;
+      background: #fffefb; padding: 7px 0; border-radius: 12px;
+      width: 88px; text-align: center; letter-spacing: 2px;
+      border: 1px solid #d4b87a; color: #3d2815; box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .timer-display-box.alarm { animation: blink 0.4s ease-in-out 6; background: #fff0f0; color: #cc0000; }
     @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
-    .timer-controls { display: flex; gap: 0.5rem; flex-wrap: wrap; }
-    .timer-btn { background: #f3d89e; border: 1px solid #c99c4b; border-radius: 2rem; padding: 0.4rem 1rem; font-weight: bold; cursor: pointer; white-space: nowrap; font-size: 0.85rem; }
-    .timer-btn:hover { background: #ecc477; }
-    .task-list { display: flex; flex-direction: column; gap: 0.9rem; margin: 1.2rem 0; }
-    .task-card { background: #ffffffeb; border-radius: 1.8rem; padding: 0.7rem 1rem; border: 1px solid #f5d59c; box-shadow: 0 6px 14px rgba(140,90,20,0.08); transition: background 0.25s; }
-    .task-card.completed-card { background: #d4edc9; border-color: #8bbf6f; }
-    .task-card.incomplete-card { background: #ffe0d4; border-color: #e0977a; }
-    .task-main-row { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
-    .task-index { font-weight: 800; font-size: 1.1rem; background: #fde5bd; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; color: #4d2f10; flex-shrink: 0; }
-    .task-details { flex: 2; min-width: 120px; }
-    .task-title { font-weight: 700; font-size: 1rem; color: #422c15; }
-    .task-desc { font-size: 0.75rem; color: #704e2c; background: rgba(255,255,240,0.7); padding: 0.15rem 0.6rem; border-radius: 1rem; display: inline-block; }
-    .time-input-area { display: flex; align-items: center; gap: 0.3rem; }
-    .time-input { width: 60px; padding: 0.3rem; border-radius: 1.2rem; border: 1px solid #dbaa5e; background: #fffbf2; text-align: center; font-weight: 600; }
-    .check-btn { width: 44px; height: 44px; border-radius: 50%; border: 2px solid #e6b56b; background: #fff4e0; font-size: 1.6rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; color: #ad7a42; font-weight: bold; flex-shrink: 0; }
-    .check-btn.completed { background: #8bc34a; border-color: #5a8625; color: white; }
-    .math-actions { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px dashed #e0c78a; }
-    .math-preview-inline { display: none; background: #f8fdf0; border-radius: 1.2rem; padding: 0.8rem; margin-top: 0.5rem; border: 1px dashed #a3c97a; }
+    .countdown-input-box {
+      font-size: 1.5rem; font-weight: 700; font-family: 'SF Mono', 'SF Pro Display', 'Menlo', monospace;
+      background: #fffefb; padding: 7px 0; border-radius: 12px;
+      width: 88px; text-align: center; letter-spacing: 2px;
+      border: 1px solid #c9a55c; color: #3d2815; box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .countdown-wrap { display: flex; align-items: center; gap: 4px; }
+    .countdown-unit { font-size: 0.7rem; color: #8b6d4e; font-weight: 600; white-space: nowrap; }
+    .timer-right { display: grid; grid-template-columns: repeat(3, 32px); gap: 4px; flex-shrink: 0; }
+    .timer-btn {
+      background: linear-gradient(180deg, #fef5e2, #f7e1b8); border: 1px solid #c9a55c; border-radius: 10px;
+      padding: 6px 0; font-weight: 700; cursor: pointer; font-size: 0.7rem;
+      white-space: nowrap; text-align: center; width: 32px; color: #5c3d1e;
+    }
+    .timer-btn-wide { width: 44px; justify-self: center; }
+    .timer-btn:active { background: #f0d090; }
+    .btn-placeholder { visibility: hidden; width: 32px; }
+
+    .task-list { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+    .task-card {
+      background: #fffefb; border-radius: 14px; padding: 9px 10px;
+      border: 1px solid #ecd9b0; transition: all 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .task-card::before {
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 0 2px 2px 0;
+    }
+    .task-card.completed-card { background: #f4faf0; border-color: #b8d88a; }
+    .task-card.completed-card::before { background: #7ab85c; }
+    .task-card.incomplete-card { background: #fefaf6; border-color: #e8c8a8; }
+    .task-card.incomplete-card::before { background: #d4956b; }
+
+    .task-card.cat-english { border-left: none; }
+    .task-card.cat-english::before { background: #5b9bd5; }
+    .task-card.cat-english.completed-card { background: #f2f8fc; border-color: #b8d4ee; }
+    .task-card.cat-english.completed-card::before { background: #3a7cc3; }
+    .task-card.cat-english.incomplete-card { background: #fef8f6; border-color: #e8c0b8; }
+    .task-card.cat-english.incomplete-card::before { background: #d4786b; }
+
+    .task-card.cat-chinese { border-left: none; }
+    .task-card.cat-chinese::before { background: #5eac6b; }
+    .task-card.cat-chinese.completed-card { background: #f2faf4; border-color: #b8d8be; }
+    .task-card.cat-chinese.completed-card::before { background: #3d8b4a; }
+    .task-card.cat-chinese.incomplete-card { background: #fefbf4; border-color: #e8d8b0; }
+    .task-card.cat-chinese.incomplete-card::before { background: #c99a4b; }
+
+    .task-card.cat-calligraphy { border-left: none; }
+    .task-card.cat-calligraphy::before { background: #9b7ec4; }
+    .task-card.cat-calligraphy.completed-card { background: #f7f4fb; border-color: #d8cce8; }
+    .task-card.cat-calligraphy.completed-card::before { background: #7b5ea7; }
+    .task-card.cat-calligraphy.incomplete-card { background: #fefaf2; border-color: #e8d0a8; }
+    .task-card.cat-calligraphy.incomplete-card::before { background: #c9883e; }
+
+    .task-card.cat-math { border-left: none; }
+    .task-card.cat-math::before { background: #e8a450; }
+    .task-card.cat-math.completed-card { background: #fef8f2; border-color: #f0d8b8; }
+    .task-card.cat-math.completed-card::before { background: #d4892e; }
+    .task-card.cat-math.incomplete-card { background: #f2f8fc; border-color: #b8d4ee; }
+    .task-card.cat-math.incomplete-card::before { background: #5b9bd5; }
+
+    .task-card.cat-sport { border-left: none; }
+    .task-card.cat-sport::before { background: #d4786b; }
+    .task-card.cat-sport.completed-card { background: #fef6f4; border-color: #f0c8c0; }
+    .task-card.cat-sport.completed-card::before { background: #c05a4a; }
+    .task-card.cat-sport.incomplete-card { background: #f2faf4; border-color: #b8d8be; }
+    .task-card.cat-sport.incomplete-card::before { background: #5eac6b; }
+
+    .task-card.cat-dance { border-left: none; }
+    .task-card.cat-dance::before { background: #d47b9a; }
+    .task-card.cat-dance.completed-card { background: #fdf6f8; border-color: #f0d0de; }
+    .task-card.cat-dance.completed-card::before { background: #b85a78; }
+    .task-card.cat-dance.incomplete-card { background: #f7f4fb; border-color: #d8cce8; }
+    .task-card.cat-dance.incomplete-card::before { background: #9b7ec4; }
+
+    .task-card.cat-outclass { border-left: none; }
+    .task-card.cat-outclass::before { background: #4da8b8; }
+    .task-card.cat-outclass.completed-card { background: #f2f9fb; border-color: #b8e0e8; }
+    .task-card.cat-outclass.completed-card::before { background: #2d8a9a; }
+    .task-card.cat-outclass.incomplete-card { background: #fef6f4; border-color: #f0c8c0; }
+    .task-card.cat-outclass.incomplete-card::before { background: #d4786b; }
+
+    .task-main-row { display: flex; align-items: center; gap: 7px; }
+    .task-index {
+      font-weight: 700; font-size: 0.76rem; width: 23px; height: 23px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 7px; color: white; flex-shrink: 0;
+    }
+    .task-index.idx-english { background: #5b9bd5; }
+    .task-index.idx-chinese { background: #5eac6b; }
+    .task-index.idx-calligraphy { background: #9b7ec4; }
+    .task-index.idx-math { background: #e8a450; }
+    .task-index.idx-sport { background: #d4786b; }
+    .task-index.idx-dance { background: #d47b9a; }
+    .task-index.idx-outclass { background: #4da8b8; }
+    .task-details { flex: 2; min-width: 100px; }
+    .task-title { font-weight: 700; font-size: 0.78rem; color: #3d2815; }
+    .task-desc { font-size: 0.64rem; color: #8b6d4e; display: inline-block; }
+    .time-input-area { display: flex; align-items: center; gap: 2px; }
+    .time-input { width: 42px; padding: 4px 3px; border-radius: 8px; border: 1px solid #d4b87a; background: #fefaf3; text-align: center; font-weight: 600; font-size: 0.68rem; color: #3d2815; }
+    .check-btn {
+      width: 32px; height: 32px; border-radius: 50%; border: 2px solid #d4b87a;
+      background: #fefaf3; font-size: 1.1rem; display: flex; align-items: center;
+      justify-content: center; cursor: pointer; color: #b89050; font-weight: 700;
+      flex-shrink: 0; transition: all 0.2s;
+    }
+    .check-btn.completed { background: #7ab85c; border-color: #5a9440; color: white; }
+    .math-actions { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #e0cc9e; }
+    .math-btn {
+      background: linear-gradient(180deg, #fef5e2, #f7e1b8); border: 1px solid #c9a55c; border-radius: 10px;
+      padding: 5px 7px; font-weight: 600; cursor: pointer; font-size: 0.66rem;
+      white-space: nowrap; text-align: center; color: #5c3d1e;
+    }
+    .math-btn:active { background: #f0d090; }
+    .math-preview-inline { display: none; background: #fafdf5; border-radius: 10px; padding: 7px; margin-top: 5px; border: 1px solid #d5e8b8; }
     .math-preview-inline.show { display: block; }
-    .math-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; }
-    .math-item { background: white; padding: 0.4rem; text-align: center; border-radius: 0.6rem; font-size: 0.8rem; font-weight: 600; border: 1px solid #d4e7b5; }
-    .progress-box { background: #fbf3df; border-radius: 2rem; padding: 1rem 1.3rem; margin: 1rem 0; }
-    .progress-header { display: flex; justify-content: space-between; font-weight: 700; }
-    .bar-bg { height: 18px; background: #e8d5b0; border-radius: 20px; margin: 0.5rem 0; overflow: hidden; }
-    .bar-fill { width: 0%; height: 100%; background: #f6a64d; transition: 0.3s; }
-    .action-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-    .btn { background: #fce3b4; border: 1px solid #c99c4b; padding: 0.65rem 1.5rem; border-radius: 2.5rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
-    .btn:hover { background: #f5c979; }
-    .analysis-panel { background: #fff5e3; border-radius: 2rem; padding: 1.2rem; margin-top: 1rem; border: 1px dashed #c7a154; display: none; }
+    .math-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
+    .math-item { background: #fffefb; padding: 3px 2px; text-align: center; border-radius: 5px; font-size: 0.64rem; font-weight: 600; border: 1px solid #e0cc9e; color: #3d2815; }
+
+    .cat-progress-box {
+      background: linear-gradient(135deg, #fef9f0, #fdf0d8); border-radius: 16px; padding: 14px;
+      margin: 8px 0 12px; border: 1px solid #e8d5b0; text-align: center;
+      transition: all 0.4s ease;
+    }
+    .cat-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
+    .cat-container { flex-shrink: 0; animation: bounce 0.6s ease; }
+    @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+    .cat-emoji { font-size: 2.8rem; display: block; line-height: 1; }
+    .cat-text-group { text-align: left; flex: 1; }
+    .encouragement-text { font-weight: 700; font-size: 0.85rem; color: #5c3d1e; }
+    .encouragement-sub { font-size: 0.66rem; color: #8b6d4e; margin-top: 2px; }
+    .progress-inner { padding-top: 8px; border-top: 1px solid #e8d5b0; }
+    .progress-header { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.76rem; color: #5c3d1e; margin-bottom: 4px; }
+    .bar-bg { height: 10px; background: #e8d5b0; border-radius: 5px; overflow: hidden; }
+    .bar-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #e8a450, #d4892e); transition: 0.4s; border-radius: 5px; }
+
+    .action-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      background: linear-gradient(180deg, #fef5e2, #f7e1b8); border: 1px solid #c9a55c;
+      padding: 9px 16px; border-radius: 14px; font-weight: 700; cursor: pointer;
+      font-size: 0.74rem; color: #5c3d1e;
+    }
+    .btn:active { background: #f0d090; }
+    .analysis-panel { background: #fffefb; border-radius: 16px; padding: 12px; margin-top: 8px; border: 1px solid #e8d5b0; display: none; }
     .analysis-panel.show { display: block; }
-    .month-selector { display: flex; gap: 0.5rem; align-items: center; margin: 0.8rem 0; }
-    .task-filter { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 0.8rem 0; }
-    .filter-chip { background: #f3e0bc; border: 1px solid #caa25b; border-radius: 2rem; padding: 0.3rem 0.8rem; font-size: 0.75rem; cursor: pointer; transition: 0.2s; user-select: none; }
-    .filter-chip.active { background: #f6b83d; color: white; border-color: #b46f1c; }
-    .filter-chip.all-chip { background: #ffe9c7; font-weight: 700; }
-    .filter-chip.all-chip.active { background: #f28c38; color: white; }
-    canvas { width: 100%; max-height: 280px; margin-top: 0.5rem; background: #fffef7; border-radius: 1.2rem; }
-    .legend { display: flex; flex-wrap: wrap; gap: 0.8rem; margin: 0.5rem 0; font-size: 0.75rem; }
-    .legend-item { display: flex; align-items: center; gap: 0.3rem; }
-    .legend-color { width: 14px; height: 14px; border-radius: 4px; }
+    .month-selector { display: flex; gap: 4px; align-items: center; margin: 6px 0; }
+    .task-filter { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }
+    .filter-chip { background: #fdf3de; border: 1px solid #d4b87a; border-radius: 10px; padding: 4px 9px; font-size: 0.64rem; cursor: pointer; color: #5c3d1e; font-weight: 600; }
+    .filter-chip.active { background: #e8a450; color: white; border-color: #c9802a; }
+    canvas { width: 100%; max-height: 240px; margin-top: 4px; background: #fffefb; border-radius: 10px; }
+    .legend { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; font-size: 0.64rem; }
+    .legend-item { display: flex; align-items: center; gap: 3px; }
+    .legend-color { width: 10px; height: 10px; border-radius: 2px; }
   </style>
 </head>
 <body>
 <div class="container" id="mainContainer">
-  <h1>🌻 Echo的暑期打卡</h1>
-  <div class="summer-badge">📆 暑假专属 · 7月1日 - 8月31日</div>
+  <h1>🌻 Echo 2026年暑期打卡</h1>
+  <div class="summer-badge">7.1 — 8.31</div>
   <div class="date-box">
-    <span>📅</span>
+    <span style="font-size:0.78rem;color:#8b6d4e;">📅</span>
     <div class="date-nav"><button id="prevDay">◀</button><span id="currentDateDisplay"></span><button id="nextDay">▶</button></div>
-    <button id="todayBtn">📌 今天</button>
+    <button id="todayBtn">今天</button>
   </div>
   <div id="weekdayReminder" class="weekday-tip"></div>
+  <div id="danceReminder" class="dance-tip"></div>
+
+  <!-- 猫咪框移到最上面 -->
+  <div class="cat-progress-box" id="catProgressBox">
+    <div class="cat-row">
+      <div class="cat-container">
+        <span class="cat-emoji" id="catEmoji">🐱</span>
+      </div>
+      <div class="cat-text-group">
+        <div class="encouragement-text" id="encouragementText">新的一天，加油！</div>
+        <div class="encouragement-sub" id="encouragementSub">猫咪在等你开始呢~</div>
+      </div>
+    </div>
+    <div class="progress-inner">
+      <div class="progress-header"><span>✅ 今日进度</span><span id="progressText">0/12</span></div>
+      <div class="bar-bg"><div id="progressFill" class="bar-fill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <!-- 计时器面板 -->
   <div class="timer-panel">
-    <span style="font-weight:700;">⏳ 计时器</span>
-    <span class="timer-display" id="timerDisplay">00:00</span>
-    <div class="timer-controls">
-      <button class="timer-btn" id="timerStartBtn">▶ 开始</button>
-      <button class="timer-btn" id="timerPauseBtn">⏸️ 暂停</button>
-      <button class="timer-btn" id="timerResetBtn">↺ 重置</button>
+    <div class="timer-row">
+      <div class="timer-left">
+        <span class="timer-label">⏳ 计时器</span>
+        <span class="timer-display-box" id="timerDisplay">00:00</span>
+      </div>
+      <div class="timer-right">
+        <button class="timer-btn" id="timerStartBtn">▶</button>
+        <button class="timer-btn" id="timerPauseBtn">⏸</button>
+        <button class="timer-btn" id="timerResetBtn">↺</button>
+      </div>
     </div>
-    <div style="display:flex; gap:0.5rem; align-items:center;">
-      <span>倒计时</span><input type="number" id="countdownInput" placeholder="分钟" min="1" value="20" style="width:60px; padding:0.3rem; border-radius:1rem; border:1px solid #ccc;">
-      <button class="timer-btn" id="countdownBtn">⏲️ 开始倒计时</button>
+    <div class="timer-row">
+      <div class="timer-left">
+        <span class="timer-label-2">&nbsp;⏲&nbsp;倒计时</span>
+        <div class="countdown-wrap">
+          <input type="number" class="countdown-input-box" id="countdownInput" value="20" min="1" inputmode="numeric">
+          <span class="countdown-unit">分钟</span>
+        </div>
+      </div>
+      <div class="timer-right">
+        <button class="timer-btn" style="visibility:hidden;"></button>
+        <button class="timer-btn" id="countdownBtn" style="width:44px;">开始</button>
+        <button class="timer-btn" style="visibility:hidden;"></button>
+      </div>
     </div>
   </div>
+
   <div id="taskListContainer" class="task-list"></div>
-  <div class="progress-box">
-    <div class="progress-header"><span>✅ 今日进度</span><span id="progressText">0/11</span></div>
-    <div class="bar-bg"><div id="progressFill" class="bar-fill" style="width:0%"></div></div>
-  </div>
   <div class="action-row">
     <button class="btn" id="analysisBtn">📊 月度分析</button>
     <button class="btn" id="resetTodayBtn">🔄 重置今日</button>
   </div>
   <div id="analysisPanel" class="analysis-panel">
-    <div class="month-selector"><button id="prevMonthBtn">◀</button><strong id="analysisMonthLabel"></strong><button id="nextMonthBtn">▶</button></div>
-    <div id="monthSummary"></div>
+    <div class="month-selector"><button id="prevMonthBtn" class="timer-btn">◀</button><strong id="analysisMonthLabel" style="font-size:0.78rem;"></strong><button id="nextMonthBtn" class="timer-btn">▶</button></div>
+    <div id="monthSummary" style="font-size:0.7rem;color:#5c3d1e;"></div>
     <div class="task-filter" id="taskFilterContainer"></div>
     <div class="legend" id="legendContainer"></div>
     <canvas id="monthChart"></canvas>
   </div>
-  <div style="text-align:center; margin-top:0.8rem; color:#5e3f22;">☀️ 户外至少3小时 · 坚持就是胜利</div>
+  <div style="text-align:center; margin-top:10px; color:#b8906e;font-size:0.64rem;">☀️ 户外至少3小时 · 坚持就是胜利</div>
 </div>
 
 <script>
 (function() {
   const SUMMER_START='2026-07-01', SUMMER_END='2026-08-31';
-  const BASE_TASKS=[{id:'english_read',title:'英语阅读',desc:'1-2本原版书',emoji:'📖'},{id:'english_cartoon',title:'英语动画',desc:'20分钟以内',emoji:'📺'},{id:'english_listening',title:'英语听力',desc:'30分钟',emoji:'🎧'},{id:'chinese_read_1',title:'语文阅读(一)',desc:'20分钟',emoji:'📘'},{id:'chinese_read_2',title:'语文阅读(二)',desc:'20分钟',emoji:'📘'},{id:'chinese_write_1',title:'汉字书写(一)',desc:'20分钟',emoji:'✍️'},{id:'chinese_write_2',title:'汉字书写(二)',desc:'20分钟',emoji:'✍️'},{id:'writing_video',title:'书法视频',desc:'20分钟',emoji:'🎬'},{id:'math_practice',title:'数学运算',desc:'100以内加减法·20分钟',emoji:'🧮'},{id:'jump_rope',title:'跳绳',desc:'20分钟',emoji:'🪢'},{id:'outdoor',title:'户外活动',desc:'至少3小时',emoji:'🌳'}];
-  const OUTCLASS_TASK={id:'english_outclass',title:'英语外教课',desc:'25分钟',emoji:'🎓'}, OUTCLASS_DAYS=[1,2];
-  const TASK_COLORS=['#e74c3c','#3498db','#9b59b6','#2ecc71','#f39c12','#1abc9c','#e67e22','#2980b9','#c0392b','#27ae60','#8e44ad','#d35400'];
-  const OUTCLASS_TIME={1:'🎓 英语外教课 19:30–19:55',2:'🎓 英语外教课 18:30–18:55'};
-  const STORAGE_DATA='echo_v27', MATH_STORAGE_KEY='math_v20';
+  const BASE_TASKS=[
+    {id:'chinese_read_1',title:'语文阅读(一)',desc:'20分钟',emoji:'📘',cat:'chinese'},
+    {id:'chinese_read_2',title:'语文阅读(二)',desc:'20分钟',emoji:'📘',cat:'chinese'},
+    {id:'writing_video',title:'书法视频',desc:'20分钟',emoji:'🎬',cat:'calligraphy'},
+    {id:'chinese_write_1',title:'汉字书写(一)',desc:'20分钟',emoji:'✍️',cat:'chinese'},
+    {id:'chinese_write_2',title:'汉字书写(二)',desc:'20分钟',emoji:'✍️',cat:'chinese'},
+    {id:'english_read',title:'英语阅读',desc:'1-2本原版书',emoji:'📖',cat:'english'},
+    {id:'english_cartoon',title:'英语动画',desc:'20分钟以内',emoji:'📺',cat:'english'},
+    {id:'english_listening',title:'英语听力',desc:'30分钟',emoji:'🎧',cat:'english'},
+    {id:'multiplication',title:'乘法口诀',desc:'10分钟',emoji:'✖️',cat:'math'},
+    {id:'math_practice',title:'数学运算',desc:'100以内·20分钟',emoji:'🧮',cat:'math'},
+    {id:'jump_rope',title:'跳绳',desc:'20分钟',emoji:'🪢',cat:'sport'},
+    {id:'outdoor',title:'户外活动',desc:'至少3小时',emoji:'🌳',cat:'sport'}
+  ];
+  const OUTCLASS_TASK={id:'english_outclass',title:'外教课',desc:'25分钟',emoji:'🎓',cat:'outclass'}, OUTCLASS_DAYS=[1,2];
+  const DANCE_TASK={id:'dance',title:'舞蹈课',desc:'10:40-12:10·1.5小时',emoji:'💃',cat:'dance'};
+  const DANCE_BASIC_TASK={id:'dance_basic',title:'舞蹈基本功',desc:'18:30-20:00·1.5小时',emoji:'🩰',cat:'dance'};
+  const DANCE_DAYS={3:true,0:true}; const DANCE_BASIC_DAYS={4:true};
+  const TASK_COLORS=['#5eac6b','#5eac6b','#9b7ec4','#5eac6b','#5eac6b','#5b9bd5','#5b9bd5','#5b9bd5','#e8a450','#e8a450','#d4786b','#d4786b','#d47b9a','#4da8b8'];
+  const OUTCLASS_TIME={1:'外教课 19:30-19:55',2:'外教课 18:30-18:55'};
+  const STORAGE_DATA='echo_v87_catup', MATH_STORAGE_KEY='math_v80';
   let currentDateStr=getTodayString(), analysisYearMonth='2026-07', selectedTaskFilters=['all'], timerInterval=null, timerSeconds=0, mathProblems=[];
   const AudioContext=window.AudioContext||window.webkitAudioContext; let audioCtx=null;
 
-  function formatDuration(min){if(min<60)return min+'分钟';let h=Math.floor(min/60),m=min%60;return m>0?h+'小时'+m+'分钟':h+'小时';}
-  function playGreatSound(){if(!audioCtx)audioCtx=new AudioContext();let now=audioCtx.currentTime;[0,0.15,0.3].forEach((d,i)=>{let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';let t=now+d;o.frequency.setValueAtTime(600+i*200,t);o.frequency.exponentialRampToValueAtTime(900+i*200,t+0.1);g.gain.setValueAtTime(0.25,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.2);o.start(t);o.stop(t+0.2);});}
-  function playUncheckSound(){if(!audioCtx)audioCtx=new AudioContext();let now=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(600,now);o.frequency.exponentialRampToValueAtTime(400,now+0.15);g.gain.setValueAtTime(0.2,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.2);o.start(now);o.stop(now+0.2);}
-  function playAlarmSound(){if(!audioCtx)audioCtx=new AudioContext();let now=audioCtx.currentTime;for(let i=0;i<6;i++){let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='square';let t=now+i*0.4;o.frequency.setValueAtTime(880,t);o.frequency.setValueAtTime(660,t+0.15);g.gain.setValueAtTime(0.15,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.35);o.start(t);o.stop(t+0.35);}}
+  function getCatEncouragement(completed, total) {
+    const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
+    if (completed === 0) return { cat: '🐱', text: '新的一天，加油！', sub: '猫咪在等你开始呢~' };
+    if (pct < 20) return { cat: '🐱💤', text: '好的开始！', sub: '猫咪伸了个懒腰~' };
+    if (pct < 40) return { cat: '😺', text: '渐入佳境！', sub: '猫咪开心地眯起眼睛~' };
+    if (pct < 60) return { cat: '😸', text: '超过一半啦！', sub: '猫咪兴奋地竖起尾巴~' };
+    if (pct < 80) return { cat: '😻', text: '胜利在望！', sub: '猫咪眼睛亮晶晶地看着你~' };
+    if (pct < 100) return { cat: '🐱👑', text: '马上完成！', sub: '猫咪给你戴上了小皇冠~' };
+    return { cat: '🎉🐱🎉', text: '太厉害了！<br>全部完成！', sub: '猫咪为你欢呼庆祝！' };
+  }
 
+  function getCatClass(cat){const m={english:'cat-english',chinese:'cat-chinese',calligraphy:'cat-calligraphy',math:'cat-math',sport:'cat-sport',dance:'cat-dance',outclass:'cat-outclass'};return m[cat]||'';}
+  function getIdxClass(cat){const m={english:'idx-english',chinese:'idx-chinese',calligraphy:'idx-calligraphy',math:'idx-math',sport:'idx-sport',dance:'idx-dance',outclass:'idx-outclass'};return m[cat]||'';}
+  function formatDuration(min){if(min<60)return min+'分钟';let h=Math.floor(min/60),m=min%60;return m>0?h+'h'+m+'min':h+'h';}
+  function playGreatSound(){if(!audioCtx)audioCtx=new AudioContext();let now=audioCtx.currentTime;[0,0.1,0.2].forEach((d,i)=>{let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';let t=now+d;o.frequency.setValueAtTime(700+i*180,t);o.frequency.exponentialRampToValueAtTime(1000+i*180,t+0.07);g.gain.setValueAtTime(0.18,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.14);o.start(t);o.stop(t+0.14);});}
+  function playUncheckSound(){if(!audioCtx)audioCtx=new AudioContext();let now=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(500,now);o.frequency.exponentialRampToValueAtTime(300,now+0.1);g.gain.setValueAtTime(0.12,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.14);o.start(now);o.stop(now+0.14);}
+  function playAlarmSound(){if(!audioCtx)audioCtx=new AudioContext();let now=audioCtx.currentTime;for(let i=0;i<5;i++){let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='square';let t=now+i*0.28;o.frequency.setValueAtTime(800,t);o.frequency.setValueAtTime(600,t+0.1);g.gain.setValueAtTime(0.1,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.24);o.start(t);o.stop(t+0.24);}}
   function getTodayString(){let t=new Date(),s=formatDate(t);return s<SUMMER_START?SUMMER_START:s>SUMMER_END?SUMMER_END:s;}
   function formatDate(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
   function isDateInSummer(s){return s>=SUMMER_START&&s<=SUMMER_END;}
   function getWeekday(d){return new Date(d+'T00:00:00').getDay();}
-  function getTodayTasks(){let w=getWeekday(currentDateStr),t=[...BASE_TASKS];if(OUTCLASS_DAYS.includes(w))t.splice(3,0,OUTCLASS_TASK);return t;}
-
+  function getTodayTasks(){let w=getWeekday(currentDateStr),t=[...BASE_TASKS];if(OUTCLASS_DAYS.includes(w))t.splice(5,0,OUTCLASS_TASK);if(DANCE_DAYS[w])t.push(DANCE_TASK);if(DANCE_BASIC_DAYS[w])t.push(DANCE_BASIC_TASK);return t;}
   const storage={load(){try{return JSON.parse(localStorage.getItem(STORAGE_DATA))||{};}catch{return{};}},save(d){localStorage.setItem(STORAGE_DATA,JSON.stringify(d));},getDay(d){return this.load()[d]||{tasks:{}};},set(d,id,c,m){if(!isDateInSummer(d))return;let a=this.load();if(!a[d])a[d]={tasks:{}};a[d].tasks[id]={completed:c,minutes:m||0};this.save(a);},resetDay(d){let a=this.load();delete a[d];this.save(a);}};
   function getMathHistory(){try{return JSON.parse(localStorage.getItem(MATH_STORAGE_KEY))||{};}catch{return{};}}
   function saveMathHistory(h){localStorage.setItem(MATH_STORAGE_KEY,JSON.stringify(h));}
   function getMathForDate(d){let h=getMathHistory();return h[d]||null;}
   function saveMathForDate(d,p){let h=getMathHistory();h[d]=p;saveMathHistory(h);}
-  function generateRandomProblems(){let p=[],s=new Set();while(p.length<40){let add=Math.random()>0.4,pr;if(add){let a=Math.floor(Math.random()*90)+5,b=Math.floor(Math.random()*(100-a))+1;pr=a+' + '+b+' = ____';}else{let a=Math.floor(Math.random()*99)+2,b=Math.floor(Math.random()*(a-1))+1;pr=a+' - '+b+' = ____';}if(!s.has(pr)){s.add(pr);p.push(pr);}}return p;}
+  function generateRandomProblems(){let p=[],s=new Set();while(p.length<40){let add=Math.random()>0.4,pr;if(add){let a=Math.floor(Math.random()*90)+5,b=Math.floor(Math.random()*(100-a))+1;pr=a+'+'+b+'=___';}else{let a=Math.floor(Math.random()*99)+2,b=Math.floor(Math.random()*(a-1))+1;pr=a+'-'+b+'=___';}if(!s.has(pr)){s.add(pr);p.push(pr);}}return p;}
   function generateUniqueProblems(d){let s=getMathForDate(d);if(s&&s.length===40)return[...s];let p=generateRandomProblems();saveMathForDate(d,p);return p;}
   function regenerateProblems(){let p=generateRandomProblems();saveMathForDate(currentDateStr,p);mathProblems=p;renderMathInline();}
-
   const $=id=>document.getElementById(id);
-  const dateDisplay=$('currentDateDisplay'),taskContainer=$('taskListContainer'),progressText=$('progressText'),progressFill=$('progressFill'),weekdayReminder=$('weekdayReminder'),analysisPanel=$('analysisPanel'),analysisMonthLabel=$('analysisMonthLabel'),monthSummary=$('monthSummary'),chartCanvas=$('monthChart'),taskFilterContainer=$('taskFilterContainer'),legendContainer=$('legendContainer'),timerDisplay=$('timerDisplay'),prevBtn=$('prevDay'),nextBtn=$('nextDay');
+  const dateDisplay=$('currentDateDisplay'),taskContainer=$('taskListContainer'),progressText=$('progressText'),progressFill=$('progressFill'),weekdayReminder=$('weekdayReminder'),danceReminder=$('danceReminder'),analysisPanel=$('analysisPanel'),analysisMonthLabel=$('analysisMonthLabel'),monthSummary=$('monthSummary'),chartCanvas=$('monthChart'),taskFilterContainer=$('taskFilterContainer'),legendContainer=$('legendContainer'),timerDisplay=$('timerDisplay'),prevBtn=$('prevDay'),nextBtn=$('nextDay'),catEmoji=$('catEmoji'),encouragementText=$('encouragementText'),encouragementSub=$('encouragementSub');
+
+  function updateCatEncouragement(completed, total) {
+    const e = getCatEncouragement(completed, total);
+    catEmoji.textContent = e.cat;
+    encouragementText.innerHTML = e.text;
+    encouragementSub.textContent = e.sub;
+    catEmoji.parentElement.style.animation = 'none';
+    catEmoji.parentElement.offsetHeight;
+    catEmoji.parentElement.style.animation = 'bounce 0.6s ease';
+  }
 
   function updateTimerDisplay(){let m=Math.floor(timerSeconds/60),s=timerSeconds%60;timerDisplay.textContent=String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
   function stopTimer(){if(timerInterval){clearInterval(timerInterval);timerInterval=null;}timerDisplay.classList.remove('alarm');}
@@ -154,108 +351,91 @@
   function pauseTimer(){stopTimer();}
   function resetTimer(){stopTimer();timerSeconds=0;timerDisplay.classList.remove('alarm');updateTimerDisplay();}
   function startCountdown(min){stopTimer();timerSeconds=min*60;updateTimerDisplay();timerInterval=setInterval(()=>{if(timerSeconds<=0){stopTimer();timerDisplay.classList.add('alarm');playAlarmSound();setTimeout(()=>timerDisplay.classList.remove('alarm'),3000);return;}timerSeconds--;updateTimerDisplay();},1000);}
-
   $('timerStartBtn').addEventListener('click',startTimer);$('timerPauseBtn').addEventListener('click',pauseTimer);$('timerResetBtn').addEventListener('click',resetTimer);
   $('countdownBtn').addEventListener('click',()=>{let m=parseInt($('countdownInput').value,10);if(m>0)startCountdown(m);});
 
   function renderMathInline(){let g=document.getElementById('mathGridInline');if(!g)return;g.innerHTML='';mathProblems.forEach(p=>{let d=document.createElement('div');d.className='math-item';d.textContent=p;g.appendChild(d);});}
-
-  function directPrint(){
-    // 创建独立的打印窗口
-    let w = window.open('','_blank','width=800,height=600');
-    let html = '<!DOCTYPE html><html><head><meta charset="UTF-8"><title>数学练习题</title><style>';
-    html += '@page { size: A4; margin: 12mm; }';
-    html += 'body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; margin:0; padding:15px; }';
-    html += 'h2 { text-align:center; font-size:18px; margin-bottom:6px; }';
-    html += '.info { text-align:center; font-size:13px; margin-bottom:12px; }';
-    html += '.grid { display:grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }';
-    html += '.item { padding:8px 4px; border:1px solid #999; text-align:center; font-size:14px; border-radius:3px; }';
-    html += '</style></head><body>';
-    html += '<h2>🧮 数学运算练习（100以内）</h2>';
-    html += '<div class="info">姓名：__________ 日期：__________ 用时：__________</div>';
-    html += '<div class="grid">';
-    mathProblems.forEach(p => { html += '<div class="item">'+p+'</div>'; });
-    html += '</div></body></html>';
-    
-    w.document.write(html);
-    w.document.close();
-    w.focus();
-    setTimeout(()=>{ w.print(); }, 500);
+  function openPrintPreview(){
+    let today=new Date();let dateStr=today.getFullYear()+'年'+(today.getMonth()+1)+'月'+today.getDate()+'日';
+    let w=window.open('','_blank','width=390,height=600');
+    let h='<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=390"><title>数学题</title><style>';
+    h+='*{margin:0;padding:0}body{font-family:-apple-system,sans-serif;background:#f5f5f5;padding:12px}';
+    h+='.card{background:white;border-radius:12px;padding:16px;max-width:400px;margin:0 auto}';
+    h+='h2{text-align:center;font-size:16px;margin-bottom:6px}.date-info{text-align:center;font-size:12px;color:#888;margin-bottom:10px}';
+    h+='.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.item{background:#fafafa;padding:8px 2px;border:1px solid #e5e5ea;text-align:center;font-size:13px;border-radius:6px}';
+    h+='.btn-row{display:flex;gap:8px;margin-top:14px;justify-content:center}';
+    h+='.btn-print{background:#e8a450;border:none;padding:10px 24px;border-radius:20px;font-weight:600;color:white;font-size:14px;cursor:pointer}';
+    h+='.btn-close{background:#e5e5ea;border:none;padding:10px 24px;border-radius:20px;font-weight:500;color:#1c1c1e;font-size:14px;cursor:pointer}';
+    h+='@media print{body{background:white}.card{box-shadow:none;max-width:100%}.btn-row{display:none}}';
+    h+='</style></head><body><div class="card"><h2>数学运算 (100以内)</h2><div class="date-info">'+dateStr+'</div><div class="grid">';
+    mathProblems.forEach(p=>{h+='<div class="item">'+p+'</div>';});
+    h+='</div><div class="btn-row"><button class="btn-close" onclick="window.close()">关闭</button><button class="btn-print" onclick="window.print()">打印</button></div></div></body></html>';
+    w.document.write(h);w.document.close();w.focus();
   }
 
   function updateNavButtons(){prevBtn.disabled=(currentDateStr<=SUMMER_START);nextBtn.disabled=(currentDateStr>=SUMMER_END);}
-  function renderReminder(){let w=getWeekday(currentDateStr),t=OUTCLASS_TIME[w]||'';weekdayReminder.style.display=t?'flex':'none';if(t)weekdayReminder.innerHTML='📌 今日安排：<strong>'+t+'</strong> (别忘记哦)';}
-
+  function renderReminders(){let w=getWeekday(currentDateStr);let ot=OUTCLASS_TIME[w]||'';weekdayReminder.style.display=ot?'flex':'none';if(ot)weekdayReminder.innerHTML='📌 '+ot;let dt='';if(DANCE_DAYS[w])dt='💃 舞蹈课 10:40-12:10';if(DANCE_BASIC_DAYS[w])dt='🩰 舞蹈基本功 18:30-20:00';danceReminder.style.display=dt?'flex':'none';if(dt)danceReminder.innerHTML=dt;}
   function renderTasks(){
     let dayData=storage.getDay(currentDateStr),tasksState=dayData.tasks||{},todayTasks=getTodayTasks();taskContainer.innerHTML='';
+    let completedCount = 0;
     todayTasks.forEach((task,idx)=>{
-      let state=tasksState[task.id]||{completed:false,minutes:0},completed=state.completed===true,minutes=state.minutes||0,isMath=task.id==='math_practice',isOut=task.id==='english_outclass';
-      let card=document.createElement('div');card.className='task-card '+(completed?'completed-card':'incomplete-card');
-      card.innerHTML='<div class="task-main-row"><div class="task-index">'+(idx+1)+'</div><div class="task-details"><div class="task-title">'+task.emoji+' '+task.title+(isOut?' <span style="font-size:0.7rem;color:#c4461c;">(仅周一/周二)</span>':'')+'</div><div class="task-desc">'+task.desc+'</div></div><div class="time-input-area"><input type="number" class="time-input" placeholder="分钟" value="'+(minutes||'')+'" min="0" step="1" data-task-id="'+task.id+'"><span style="font-size:0.7rem;">分钟</span></div><button class="check-btn '+(completed?'completed':'')+'" data-task-id="'+task.id+'">'+(completed?'✓':'○')+'</button></div>'+(isMath?'<div class="math-actions"><button class="timer-btn math-preview-btn">👁️ 预览</button><button class="timer-btn math-regenerate-btn">🎲 换题</button><button class="timer-btn math-print-btn">🖨️ 直接打印</button></div><div class="math-preview-inline"><div class="math-grid" id="mathGridInline"></div></div>':'');
-      let checkBtn=card.querySelector('.check-btn'),timeInput=card.querySelector('.time-input');
-      checkBtn.addEventListener('click',e=>{e.stopPropagation();let nc=!completed;storage.set(currentDateStr,task.id,nc,parseInt(timeInput.value,10)||0);nc?playGreatSound():playUncheckSound();renderAll();});
-      timeInput.addEventListener('change',()=>{storage.set(currentDateStr,task.id,completed,parseInt(timeInput.value,10)||0);renderAll();});
-      if(isMath){
-        let pBtn=card.querySelector('.math-preview-btn'),rBtn=card.querySelector('.math-regenerate-btn'),prBtn=card.querySelector('.math-print-btn'),pv=card.querySelector('.math-preview-inline');
-        pBtn.addEventListener('click',e=>{e.stopPropagation();pv.classList.toggle('show');if(pv.classList.contains('show'))renderMathInline();});
-        rBtn.addEventListener('click',e=>{e.stopPropagation();regenerateProblems();if(pv.classList.contains('show'))renderMathInline();rBtn.style.background='#a8e6a3';setTimeout(()=>rBtn.style.background='',500);});
-        prBtn.addEventListener('click',e=>{e.stopPropagation();directPrint();});
-      }
+      let state=tasksState[task.id]||{completed:false,minutes:0},c=state.completed===true,m=state.minutes||0,isMath=task.id==='math_practice',isDance=task.id==='dance',isDanceBasic=task.id==='dance_basic',isOut=task.id==='english_outclass';
+      if(c) completedCount++;
+      let catClass=getCatClass(task.cat||''),idxClass=getIdxClass(task.cat||'');
+      let card=document.createElement('div');card.className='task-card '+catClass+' '+(c?'completed-card':'incomplete-card');
+      let tag='';if(isOut)tag='<span style="font-size:0.55rem;color:#2d8a9a;">周一/周二</span>';if(isDance)tag='<span style="font-size:0.55rem;color:#b85a78;">周三/周日</span>';if(isDanceBasic)tag='<span style="font-size:0.55rem;color:#7b5ea7;">周四</span>';
+      card.innerHTML='<div class="task-main-row"><div class="task-index '+idxClass+'">'+(idx+1)+'</div><div class="task-details"><div class="task-title">'+task.emoji+' '+task.title+'</div><div class="task-desc">'+task.desc+' <span style="color:#b8906e;">'+tag+'</span></div></div><div class="time-input-area"><input type="number" class="time-input" value="'+(m||'')+'" min="0" data-task-id="'+task.id+'"><span style="font-size:0.6rem;color:#8b6d4e;">分</span></div><button class="check-btn '+(c?'completed':'')+'" data-task-id="'+task.id+'">'+(c?'✓':'○')+'</button></div>'+(isMath?'<div class="math-actions"><button class="math-btn math-preview-btn">👁 预览</button><button class="math-btn math-regenerate-btn">🎲 换题</button><button class="math-btn math-print-btn">🖨 打印</button></div><div class="math-preview-inline"><div class="math-grid" id="mathGridInline"></div></div>':'');
+      let cb=card.querySelector('.check-btn'),ti=card.querySelector('.time-input');
+      cb.addEventListener('click',e=>{e.stopPropagation();let nc=!c;storage.set(currentDateStr,task.id,nc,parseInt(ti.value,10)||0);nc?playGreatSound():playUncheckSound();renderAll();});
+      ti.addEventListener('change',()=>{storage.set(currentDateStr,task.id,c,parseInt(ti.value,10)||0);renderAll();});
+      if(isMath){let pb=card.querySelector('.math-preview-btn'),rb=card.querySelector('.math-regenerate-btn'),prb=card.querySelector('.math-print-btn'),pv=card.querySelector('.math-preview-inline');pb.addEventListener('click',e=>{e.stopPropagation();pv.classList.toggle('show');if(pv.classList.contains('show'))renderMathInline();});rb.addEventListener('click',e=>{e.stopPropagation();regenerateProblems();if(pv.classList.contains('show'))renderMathInline();rb.style.background='#f0d090';setTimeout(()=>rb.style.background='',300);});prb.addEventListener('click',e=>{e.stopPropagation();openPrintPreview();});}
       taskContainer.appendChild(card);
     });
-    let cc=todayTasks.filter(t=>tasksState[t.id]?.completed).length;progressText.textContent=cc+'/'+todayTasks.length;progressFill.style.width=(cc/todayTasks.length*100)+'%';
+    progressText.textContent=completedCount+'/'+todayTasks.length;
+    progressFill.style.width=(completedCount/todayTasks.length*100)+'%';
+    updateCatEncouragement(completedCount, todayTasks.length);
   }
-
-  function renderAll(){dateDisplay.textContent=currentDateStr.slice(0,4)+'年'+currentDateStr.slice(5,7)+'月'+currentDateStr.slice(8,10)+'日';updateNavButtons();renderReminder();mathProblems=generateUniqueProblems(currentDateStr);renderTasks();}
+  function renderAll(){dateDisplay.textContent=currentDateStr.slice(5,7)+'月'+currentDateStr.slice(8,10)+'日';updateNavButtons();renderReminders();mathProblems=generateUniqueProblems(currentDateStr);renderTasks();}
   function changeDate(d){let dt=new Date(currentDateStr+'T00:00:00');dt.setDate(dt.getDate()+d);let ns=formatDate(dt);if(isDateInSummer(ns)){currentDateStr=ns;renderAll();}}
-  $('prevDay').addEventListener('click',()=>changeDate(-1));$('nextDay').addEventListener('click',()=>changeDate(1));$('todayBtn').addEventListener('click',()=>{currentDateStr=getTodayString();renderAll();});
-  $('resetTodayBtn').addEventListener('click',()=>{if(confirm('重置今日所有打卡和时间？')){storage.resetDay(currentDateStr);renderAll();}});
-
+  $('prevDay').addEventListener('click',()=>changeDate(-1));$('nextDay').addEventListener('click',()=>changeDate(1));$('todayBtn').addEventListener('click',()=>{currentDateStr=getTodayString();renderAll();});$('resetTodayBtn').addEventListener('click',()=>{if(confirm('重置今日？')){storage.resetDay(currentDateStr);renderAll();}});
   function getMonthDays(y,m){let d=new Date(y,m,0).getDate();return Array.from({length:d},(_,i)=>y+'-'+String(m).padStart(2,'0')+'-'+String(i+1).padStart(2,'0')).filter(isDateInSummer);}
-  function drawMultiChart(dates,dataSeries){
-    if(!chartCanvas||dates.length===0)return;let ctx=chartCanvas.getContext('2d');chartCanvas.width=Math.max(400,window.innerWidth*0.8);chartCanvas.height=260;ctx.clearRect(0,0,chartCanvas.width,260);
-    let pad={top:30,right:20,bottom:35,left:45},cw=chartCanvas.width-pad.left-pad.right,ch=260-pad.top-pad.bottom,gm=1;dataSeries.forEach(s=>{let m=Math.max(...s.values,0);if(m>gm)gm=m;});
-    ctx.strokeStyle='#e0d5c0';ctx.lineWidth=0.5;for(let i=0;i<=4;i++){let y=pad.top+(ch/4)*i;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(chartCanvas.width-pad.right,y);ctx.stroke();ctx.fillStyle='#8b7355';ctx.font='10px sans-serif';ctx.fillText(Math.round(gm*(4-i)/4),5,y+4);}
-    dataSeries.forEach(series=>{if(dates.length===0)return;let bw=Math.max(4,cw/dates.length-3);ctx.fillStyle=series.color;ctx.strokeStyle=series.color;ctx.lineWidth=1.5;ctx.beginPath();dates.forEach((d,i)=>{let x=pad.left+i*(bw+3)+bw/2,h=(series.values[i]/gm)*ch,y=pad.top+ch-h;i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);});ctx.stroke();dates.forEach((d,i)=>{let x=pad.left+i*(bw+3)+bw/2,h=(series.values[i]/gm)*ch,y=pad.top+ch-h;ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fill();});});
-    ctx.fillStyle='#3d2b12';ctx.font='9px sans-serif';dates.forEach((d,i)=>{if(i%Math.ceil(dates.length/15)===0){let bw=Math.max(4,cw/dates.length-3),x=pad.left+i*(bw+3)+bw/2;ctx.fillText(d.slice(-2),x-6,255);}});ctx.fillStyle='#3d2b12';ctx.font='bold 10px sans-serif';ctx.fillText('分钟',8,18);
-  }
-
-  function updateAnalysis(){
-    let [y,m]=analysisYearMonth.split('-').map(Number);analysisMonthLabel.textContent=y+'年'+m+'月';let dates=getMonthDays(y,m),all=storage.load(),summaryHTML='';
-    if(selectedTaskFilters.includes('all')){
-      let totalMin=0;
-      let values=dates.map(d=>{
-        let tasks=all[d]?.tasks||{},w=getWeekday(d),dt=OUTCLASS_DAYS.includes(w)?[...BASE_TASKS,OUTCLASS_TASK]:BASE_TASKS,dayMin=0;
-        dt.forEach(t=>{let m=tasks[t.id]?.minutes||0;dayMin+=m;});
-        totalMin+=dayMin;
-        return dt.filter(t=>tasks[t.id]?.completed).length;
+  function getAllTasks(){return[...BASE_TASKS,OUTCLASS_TASK,DANCE_TASK,DANCE_BASIC_TASK];}
+  function drawMultiChart(dates,ds){
+    if(!chartCanvas||dates.length===0)return;let ctx=chartCanvas.getContext('2d');
+    chartCanvas.width=Math.max(340,window.innerWidth*0.9);chartCanvas.height=240;ctx.clearRect(0,0,chartCanvas.width,240);
+    let pad={top:36,right:14,bottom:36,left:38},cw=chartCanvas.width-pad.left-pad.right,ch=240-pad.top-pad.bottom,gm=1;
+    ds.forEach(s=>{let m=Math.max(...s.values,0);if(m>gm)gm=m;});
+    ctx.strokeStyle='#e0cc9e';ctx.lineWidth=0.5;
+    for(let i=0;i<=4;i++){let y=pad.top+(ch/4)*i;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(chartCanvas.width-pad.right,y);ctx.stroke();ctx.fillStyle='#b8906e';ctx.font='9px sans-serif';ctx.fillText(Math.round(gm*(4-i)/4),2,y+4);}
+    ds.forEach(s=>{
+      if(dates.length===0)return;let bw=Math.max(4,cw/dates.length-2);
+      ctx.fillStyle=s.color;ctx.strokeStyle=s.color;ctx.lineWidth=2;
+      ctx.beginPath();
+      dates.forEach((d,i)=>{
+        let x=pad.left+i*(bw+2)+bw/2,h=(s.values[i]/gm)*ch,y=pad.top+ch-h;
+        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
       });
-      let sum=values.reduce((a,b)=>a+b,0);
-      summaryHTML='📋 本月打卡总次数：<strong>'+sum+'</strong> · 日均 '+(sum/dates.length||0).toFixed(1)+' 项<br>⏱️ 本月总时长：<strong>'+formatDuration(totalMin)+'</strong>（'+totalMin+'分钟）';
-      drawMultiChart(dates,[{label:'全部打卡',color:'#f28c38',values}]);
-      renderLegend([{label:'全部打卡',color:'#f28c38'}]);
-    }else{
-      let dataSeries=[],legendItems=[],totalAll=0;
-      selectedTaskFilters.forEach(tid=>{
-        let task=[...BASE_TASKS,OUTCLASS_TASK].find(t=>t.id===tid);if(!task)return;
-        let values=dates.map(d=>all[d]?.tasks?.[tid]?.minutes||0),sum=values.reduce((a,b)=>a+b,0);totalAll+=sum;
-        let col=TASK_COLORS[[...BASE_TASKS,OUTCLASS_TASK].indexOf(task)%TASK_COLORS.length];
-        dataSeries.push({label:task.title,color:col,values});legendItems.push({label:task.emoji+' '+task.title,color:col});
+      ctx.stroke();
+      dates.forEach((d,i)=>{
+        let x=pad.left+i*(bw+2)+bw/2,h=(s.values[i]/gm)*ch,y=pad.top+ch-h;
+        ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle=s.color;ctx.fill();
+        if(s.values[i]>0){
+          ctx.fillStyle='#3d2815';ctx.font='bold 10px sans-serif';
+          ctx.fillText(s.values[i],x-10,y-8);
+        }
       });
-      summaryHTML='⏱️ 选中任务合计：<strong>'+formatDuration(totalAll)+'</strong>（'+totalAll+'分钟） · 共 '+selectedTaskFilters.length+' 项';
-      drawMultiChart(dates,dataSeries);renderLegend(legendItems);
-    }
-    monthSummary.innerHTML=summaryHTML;renderFilters();
+    });
+    ctx.fillStyle='#8b6d4e';ctx.font='8px sans-serif';
+    dates.forEach((d,i)=>{if(i%Math.ceil(dates.length/10)===0){let bw=Math.max(4,cw/dates.length-2),x=pad.left+i*(bw+2)+bw/2;ctx.fillText(d.slice(-2),x-6,230);}});
+    ctx.fillText('分',2,20);
   }
-
+  function updateAnalysis(){let [y,m]=analysisYearMonth.split('-').map(Number);analysisMonthLabel.textContent=y+'年'+m+'月';let dates=getMonthDays(y,m),all=storage.load(),sh='';if(selectedTaskFilters.includes('all')){let tm=0,vals=dates.map(d=>{let tasks=all[d]?.tasks||{},w=getWeekday(d),dt=[...BASE_TASKS];if(OUTCLASS_DAYS.includes(w))dt.splice(5,0,OUTCLASS_TASK);if(DANCE_DAYS[w])dt.push(DANCE_TASK);if(DANCE_BASIC_DAYS[w])dt.push(DANCE_BASIC_TASK);let dm=0;dt.forEach(t=>{dm+=tasks[t.id]?.minutes||0;});tm+=dm;return dt.filter(t=>tasks[t.id]?.completed).length;}),sum=vals.reduce((a,b)=>a+b,0);sh='打卡 <b>'+sum+'</b> 次 · 日均 '+(sum/dates.length||0).toFixed(1)+' 项<br>时长 <b>'+formatDuration(tm)+'</b> ('+tm+'分)';drawMultiChart(dates,[{label:'全部',color:'#e8a450',values:vals}]);renderLegend([{label:'全部打卡',color:'#e8a450'}]);}else{let ds=[],li=[],ta=0;selectedTaskFilters.forEach(tid=>{let task=getAllTasks().find(t=>t.id===tid);if(!task)return;let vals=dates.map(d=>all[d]?.tasks?.[tid]?.minutes||0),sum=vals.reduce((a,b)=>a+b,0);ta+=sum;let col=TASK_COLORS[getAllTasks().indexOf(task)%TASK_COLORS.length];ds.push({label:task.title,color:col,values:vals});li.push({label:task.emoji+task.title,color:col});});sh='合计 <b>'+formatDuration(ta)+'</b> ('+ta+'分) · '+selectedTaskFilters.length+' 项';drawMultiChart(dates,ds);renderLegend(li);}monthSummary.innerHTML=sh;renderFilters();}
   function renderLegend(items){legendContainer.innerHTML='';items.forEach(i=>{let d=document.createElement('div');d.className='legend-item';d.innerHTML='<div class="legend-color" style="background:'+i.color+'"></div><span>'+i.label+'</span>';legendContainer.appendChild(d);});}
   function toggleFilter(fid){if(fid==='all'){selectedTaskFilters=['all'];}else{selectedTaskFilters=selectedTaskFilters.filter(f=>f!=='all');let i=selectedTaskFilters.indexOf(fid);i>-1?selectedTaskFilters.splice(i,1):selectedTaskFilters.push(fid);if(selectedTaskFilters.length===0)selectedTaskFilters=['all'];}updateAnalysis();}
-  function renderFilters(){taskFilterContainer.innerHTML='';let ac=document.createElement('span');ac.className='filter-chip all-chip'+(selectedTaskFilters.includes('all')?' active':'');ac.textContent='📋 全部打卡';ac.addEventListener('click',()=>toggleFilter('all'));taskFilterContainer.appendChild(ac);[...BASE_TASKS,OUTCLASS_TASK].forEach(t=>{let c=document.createElement('span');c.className='filter-chip'+(selectedTaskFilters.includes(t.id)?' active':'');c.textContent=t.emoji+' '+t.title;c.addEventListener('click',()=>toggleFilter(t.id));taskFilterContainer.appendChild(c);});}
-
+  function renderFilters(){taskFilterContainer.innerHTML='';let ac=document.createElement('span');ac.className='filter-chip'+(selectedTaskFilters.includes('all')?' active':'');ac.textContent='全部';ac.addEventListener('click',()=>toggleFilter('all'));taskFilterContainer.appendChild(ac);getAllTasks().forEach(t=>{let c=document.createElement('span');c.className='filter-chip'+(selectedTaskFilters.includes(t.id)?' active':'');c.textContent=t.emoji+' '+t.title;c.addEventListener('click',()=>toggleFilter(t.id));taskFilterContainer.appendChild(c);});}
   $('analysisBtn').addEventListener('click',()=>{if(analysisPanel.classList.contains('show'))analysisPanel.classList.remove('show');else{analysisPanel.classList.add('show');updateAnalysis();}});
   $('prevMonthBtn').addEventListener('click',()=>{analysisYearMonth=analysisYearMonth==='2026-07'?'2026-08':'2026-07';updateAnalysis();});
   $('nextMonthBtn').addEventListener('click',()=>{analysisYearMonth=analysisYearMonth==='2026-07'?'2026-08':'2026-07';updateAnalysis();});
-
   renderAll();
 })();
 </script>
