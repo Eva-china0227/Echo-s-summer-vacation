@@ -7,78 +7,255 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: linear-gradient(170deg, #fef9f0 0%, #fdf3e0 30%, #fce8cc 100%);
       font-family: -apple-system, 'PingFang SC', 'Noto Sans', system-ui, sans-serif;
       min-height: 100vh; min-height: -webkit-fill-available;
-      padding: 14px 10px 28px;
-      display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
       -webkit-tap-highlight-color: transparent;
       -webkit-font-smoothing: antialiased;
+      background: #fef9f0;
+      overflow-x: hidden;
+    }
+
+    /* ===== 封面样式 ===== */
+    #coverPage {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(160deg, #fef6e8 0%, #fce8d0 40%, #f5d4b8 100%);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+      padding: 30px 24px;
+      text-align: center;
+      overflow: hidden;
+    }
+    #coverPage.hidden {
+      opacity: 0;
+      transform: scale(1.05);
+      pointer-events: none;
+    }
+    #coverPage .cover-badge {
+      font-size: 0.8rem;
+      color: #b8753e;
+      background: rgba(255, 248, 235, 0.7);
+      backdrop-filter: blur(4px);
+      padding: 4px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(200, 160, 100, 0.3);
+      margin-bottom: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+    .cover-cat-wrap {
+      position: relative;
+      margin-bottom: 4px;
+      animation: floatCat 3.5s ease-in-out infinite;
+    }
+    @keyframes floatCat {
+      0%, 100% { transform: translateY(0) rotate(-1deg); }
+      50% { transform: translateY(-16px) rotate(2deg); }
+    }
+    .cover-cat {
+      font-size: 6.5rem;
+      line-height: 1;
+      display: block;
+      filter: drop-shadow(0 8px 24px rgba(200, 120, 60, 0.2));
+      position: relative;
+    }
+    .cat-bow {
+      position: absolute;
+      top: 8px;
+      right: -8px;
+      font-size: 2rem;
+      animation: bowWiggle 2s ease-in-out infinite;
+      transform-origin: center;
+    }
+    @keyframes bowWiggle {
+      0%, 100% { transform: rotate(-8deg); }
+      50% { transform: rotate(8deg); }
+    }
+    .cat-hearts {
+      position: absolute;
+      font-size: 1.2rem;
+      pointer-events: none;
+    }
+    .heart1 { top: -12px; left: -20px; animation: heartFloat 3s ease-in-out infinite; }
+    .heart2 { bottom: -8px; right: -24px; animation: heartFloat 3.2s ease-in-out infinite 0.6s; }
+    .heart3 { top: 20px; right: -30px; animation: heartFloat 2.8s ease-in-out infinite 1.2s; font-size: 1rem; }
+    @keyframes heartFloat {
+      0%, 100% { opacity: 0.4; transform: scale(0.8) rotate(0deg); }
+      50% { opacity: 1; transform: scale(1.2) rotate(15deg); }
+    }
+    #coverPage .cover-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #3d2815;
+      letter-spacing: 1px;
+      margin-bottom: 2px;
+      line-height: 1.3;
+    }
+    #coverPage .cover-title .highlight {
+      background: linear-gradient(135deg, #f5a623, #e8822a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    #coverPage .cover-sub {
+      font-size: 0.95rem;
+      color: #8b6d4e;
+      margin-bottom: 14px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+    #coverPage .cover-stars {
+      font-size: 1.2rem;
+      letter-spacing: 8px;
+      margin-bottom: 14px;
+    }
+    #coverPage .cover-btn {
+      background: linear-gradient(135deg, #f5a623, #e8822a);
+      border: none;
+      border-radius: 30px;
+      padding: 14px 44px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: white;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(232, 130, 42, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+      letter-spacing: 1px;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
+    }
+    #coverPage .cover-btn:active {
+      transform: scale(0.94);
+      box-shadow: 0 3px 12px rgba(232, 130, 42, 0.25);
+    }
+    #coverPage .cover-btn .btn-shine {
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.25) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity 0.4s;
+      pointer-events: none;
+    }
+    #coverPage .cover-btn:active .btn-shine {
+      opacity: 1;
+    }
+    #coverPage .cover-foot {
+      position: absolute;
+      bottom: 22px;
+      font-size: 0.7rem;
+      color: #c4a88a;
+      letter-spacing: 3px;
+      font-weight: 500;
+    }
+    .cover-deco {
+      position: absolute;
+      font-size: 1.4rem;
+      opacity: 0.5;
+      animation: twinkle 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: translateY(0) scale(1) rotate(0deg); }
+      50% { opacity: 0.8; transform: translateY(-10px) scale(1.15) rotate(10deg); }
+    }
+    .deco1 { top: 10%; left: 8%; animation-delay: 0s; }
+    .deco2 { top: 16%; right: 10%; animation-delay: 1.2s; }
+    .deco3 { bottom: 28%; left: 6%; animation-delay: 2.4s; }
+    .deco4 { bottom: 20%; right: 6%; animation-delay: 0.6s; }
+    .deco5 { top: 48%; left: 4%; animation-delay: 1.8s; font-size: 1rem; }
+    .deco6 { top: 42%; right: 4%; animation-delay: 3.0s; font-size: 1rem; }
+    .deco7 { top: 70%; left: 12%; animation-delay: 0.3s; font-size: 0.9rem; }
+    .deco8 { top: 75%; right: 12%; animation-delay: 1.5s; font-size: 0.9rem; }
+
+    /* ===== 主界面 ===== */
+    #mainApp {
+      opacity: 0;
+      transition: opacity 0.6s ease 0.2s;
+      padding: 14px 10px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      background: linear-gradient(170deg, #fef9f0 0%, #fdf3e0 30%, #fce8cc 100%);
+    }
+    #mainApp.show {
+      opacity: 1;
     }
     .container {
       max-width: 390px; width: 100%; background: #fffefb;
       border-radius: 26px; padding: 20px 14px 16px;
       box-shadow: 0 2px 12px rgba(140,100,40,0.06), 0 8px 32px rgba(140,100,40,0.10);
       border: 1px solid rgba(230,200,150,0.3);
+      font-size: 1rem;
     }
-    h1 { font-size: 1.2rem; text-align: center; color: #3d2815; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; }
-    .summer-badge { text-align: center; font-weight: 600; color: #b8753e; background: linear-gradient(135deg, #fef5e8, #fde8cc); border-radius: 10px; padding: 3px 12px; margin: 5px auto 10px; width: fit-content; font-size: 0.7rem; }
-    .date-box { background: linear-gradient(135deg, #fefaf3, #fdf3e0); border-radius: 16px; padding: 8px 12px; display: flex; align-items: center; justify-content: space-between; gap: 6px; margin: 8px 0 10px; border: 1px solid #ecd9b0; }
-    .date-nav { display: flex; align-items: center; gap: 2px; }
-    .date-nav button, #todayBtn { background: #fffefb; border: 1px solid #d4b87a; border-radius: 10px; padding: 5px 10px; font-weight: 600; cursor: pointer; font-size: 0.7rem; color: #5c3d1e; }
+    h1 { font-size: 1.4rem; text-align: center; color: #3d2815; font-weight: 700; margin-bottom: 2px; letter-spacing: 0.5px; }
+    .summer-badge { text-align: center; font-weight: 600; color: #b8753e; background: linear-gradient(135deg, #fef5e8, #fde8cc); border-radius: 10px; padding: 4px 14px; margin: 5px auto 10px; width: fit-content; font-size: 0.8rem; }
+    .date-box { background: linear-gradient(135deg, #fefaf3, #fdf3e0); border-radius: 16px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between; gap: 6px; margin: 8px 0 10px; border: 1px solid #ecd9b0; }
+    .date-nav { display: flex; align-items: center; gap: 4px; }
+    .date-nav button, #todayBtn { background: #fffefb; border: 1px solid #d4b87a; border-radius: 10px; padding: 6px 12px; font-weight: 600; cursor: pointer; font-size: 0.8rem; color: #5c3d1e; }
     .date-nav button:disabled { opacity: 0.3; }
-    #currentDateDisplay { min-width: 88px; text-align: center; font-size: 0.82rem; font-weight: 700; color: #3d2815; }
-    .weekday-tip { background: linear-gradient(135deg, #e8f0fa, #dbe8f5); border-radius: 12px; padding: 7px 10px; margin-bottom: 7px; font-weight: 600; color: #3a5a8c; display: flex; align-items: center; gap: 5px; font-size: 0.74rem; border: 1px solid #c8daf0; }
-    .dance-tip { background: linear-gradient(135deg, #fde8f0, #fad4e2); border-radius: 12px; padding: 7px 10px; margin-bottom: 7px; font-weight: 600; color: #7a3050; display: flex; align-items: center; gap: 5px; font-size: 0.74rem; border: 1px solid #f0c0d5; }
+    #currentDateDisplay { min-width: 96px; text-align: center; font-size: 0.95rem; font-weight: 700; color: #3d2815; }
+    .weekday-tip { background: linear-gradient(135deg, #e8f0fa, #dbe8f5); border-radius: 12px; padding: 8px 12px; margin-bottom: 8px; font-weight: 600; color: #3a5a8c; display: flex; align-items: center; gap: 5px; font-size: 0.85rem; border: 1px solid #c8daf0; }
+    .dance-tip { background: linear-gradient(135deg, #fde8f0, #fad4e2); border-radius: 12px; padding: 8px 12px; margin-bottom: 8px; font-weight: 600; color: #7a3050; display: flex; align-items: center; gap: 5px; font-size: 0.85rem; border: 1px solid #f0c0d5; }
 
     .timer-panel {
-      background: linear-gradient(135deg, #fffefb, #fef8ee); border-radius: 18px; padding: 12px 12px;
+      background: linear-gradient(135deg, #fffefb, #fef8ee); border-radius: 18px; padding: 14px 14px;
       margin: 8px 0 12px; border: 1px solid #e8d5b0; box-shadow: 0 2px 8px rgba(140,100,40,0.06);
     }
-    .timer-row { display: flex; align-items: center; justify-content: space-between; gap: 6px; margin-bottom: 8px; }
+    .timer-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
     .timer-row:last-child { margin-bottom: 0; }
-    .timer-left { display: flex; align-items: center; flex-shrink: 0; }
-    .timer-label { font-weight: 700; font-size: 0.76rem; color: #5c3d1e; white-space: nowrap; margin-right: 6px; }
-    .timer-label-2 { font-weight: 700; font-size: 0.76rem; color: #5c3d1e; white-space: nowrap; margin-right: 8px; }
+    .timer-left { display: flex; align-items: center; flex-shrink: 0; gap: 6px; }
+    .timer-label { font-weight: 700; font-size: 0.85rem; color: #5c3d1e; white-space: nowrap; }
+    .timer-label-2 { font-weight: 700; font-size: 0.85rem; color: #5c3d1e; white-space: nowrap; }
     .timer-display-box {
-      font-size: 1.5rem; font-weight: 700; font-family: 'SF Mono', 'SF Pro Display', 'Menlo', monospace;
-      background: #fffefb; padding: 7px 0; border-radius: 12px;
-      width: 88px; text-align: center; letter-spacing: 2px;
+      font-size: 1.7rem; font-weight: 700; font-family: 'SF Mono', 'SF Pro Display', 'Menlo', monospace;
+      background: #fffefb; padding: 6px 0; border-radius: 12px;
+      width: 96px; text-align: center; letter-spacing: 2px;
       border: 1px solid #d4b87a; color: #3d2815; box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
     }
     .timer-display-box.alarm { animation: blink 0.4s ease-in-out 6; background: #fff0f0; color: #cc0000; }
     @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
     .countdown-input-box {
-      font-size: 1.5rem; font-weight: 700; font-family: 'SF Mono', 'SF Pro Display', 'Menlo', monospace;
-      background: #fffefb; padding: 7px 0; border-radius: 12px;
-      width: 88px; text-align: center; letter-spacing: 2px;
+      font-size: 1.7rem; font-weight: 700; font-family: 'SF Mono', 'SF Pro Display', 'Menlo', monospace;
+      background: #fffefb; padding: 6px 0; border-radius: 12px;
+      width: 96px; text-align: center; letter-spacing: 2px;
       border: 1px solid #c9a55c; color: #3d2815; box-shadow: inset 0 1px 3px rgba(0,0,0,0.04);
     }
-    .countdown-wrap { display: flex; align-items: center; gap: 4px; }
-    .countdown-unit { font-size: 0.7rem; color: #8b6d4e; font-weight: 600; white-space: nowrap; }
-    .timer-right { display: grid; grid-template-columns: repeat(3, 32px); gap: 4px; flex-shrink: 0; }
+    .countdown-wrap { display: flex; align-items: center; gap: 6px; }
+    .countdown-unit { font-size: 0.8rem; color: #8b6d4e; font-weight: 600; white-space: nowrap; }
+    .timer-right { display: grid; grid-template-columns: repeat(3, 36px); gap: 6px; flex-shrink: 0; }
     .timer-btn {
       background: linear-gradient(180deg, #fef5e2, #f7e1b8); border: 1px solid #c9a55c; border-radius: 10px;
-      padding: 6px 0; font-weight: 700; cursor: pointer; font-size: 0.7rem;
-      white-space: nowrap; text-align: center; width: 32px; color: #5c3d1e;
+      padding: 7px 0; font-weight: 700; cursor: pointer; font-size: 0.8rem;
+      white-space: nowrap; text-align: center; width: 36px; color: #5c3d1e;
     }
-    .timer-btn-wide { width: 44px; justify-self: center; }
-    .timer-btn:active { background: #f0d090; }
-    .btn-placeholder { visibility: hidden; width: 32px; }
+    .timer-btn-wide { width: 50px; justify-self: center; }
+    .btn-placeholder { visibility: hidden; width: 36px; }
 
-    .task-list { display: flex; flex-direction: column; gap: 6px; margin: 10px 0; }
+    .task-list { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
     .task-card {
-      background: #fffefb; border-radius: 14px; padding: 9px 10px;
+      background: #fffefb; border-radius: 14px; padding: 11px 12px;
       border: 1px solid #ecd9b0; transition: all 0.25s;
       position: relative; overflow: hidden;
     }
     .task-card::before {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; border-radius: 0 2px 2px 0;
+      content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; border-radius: 0 2px 2px 0;
     }
     .task-card.completed-card { background: #f4faf0; border-color: #b8d88a; }
     .task-card.completed-card::before { background: #7ab85c; }
     .task-card.incomplete-card { background: #fefaf6; border-color: #e8c8a8; }
     .task-card.incomplete-card::before { background: #d4956b; }
+    .task-card.deleted-card { background: #f5f5f5; border-color: #cccccc; opacity: 0.6; }
+    .task-card.deleted-card::before { background: #999999; }
 
     .task-card.cat-english { border-left: none; }
     .task-card.cat-english::before { background: #5b9bd5; }
@@ -129,9 +306,9 @@
     .task-card.cat-outclass.incomplete-card { background: #fef6f4; border-color: #f0c8c0; }
     .task-card.cat-outclass.incomplete-card::before { background: #d4786b; }
 
-    .task-main-row { display: flex; align-items: center; gap: 7px; }
+    .task-main-row { display: flex; align-items: center; gap: 10px; flex-wrap: nowrap; }
     .task-index {
-      font-weight: 700; font-size: 0.76rem; width: 23px; height: 23px;
+      font-weight: 700; font-size: 0.85rem; width: 26px; height: 26px;
       display: flex; align-items: center; justify-content: center;
       border-radius: 7px; color: white; flex-shrink: 0;
     }
@@ -142,79 +319,134 @@
     .task-index.idx-sport { background: #d4786b; }
     .task-index.idx-dance { background: #d47b9a; }
     .task-index.idx-outclass { background: #4da8b8; }
-    .task-details { flex: 2; min-width: 100px; }
-    .task-title { font-weight: 700; font-size: 0.78rem; color: #3d2815; }
-    .task-desc { font-size: 0.64rem; color: #8b6d4e; display: inline-block; }
-    .time-input-area { display: flex; align-items: center; gap: 2px; }
-    .time-input { width: 42px; padding: 4px 3px; border-radius: 8px; border: 1px solid #d4b87a; background: #fefaf3; text-align: center; font-weight: 600; font-size: 0.68rem; color: #3d2815; }
+    .task-details { flex: 1; min-width: 0; overflow: hidden; }
+    .task-title { font-weight: 700; font-size: 0.9rem; color: #3d2815; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .task-desc { font-size: 0.75rem; color: #8b6d4e; display: inline-block; }
+    .time-input-area { display: flex; align-items: center; gap: 3px; flex-shrink: 0; }
+    .time-input { width: 48px; padding: 5px 4px; border-radius: 8px; border: 1px solid #d4b87a; background: #fefaf3; text-align: center; font-weight: 600; font-size: 0.8rem; color: #3d2815; }
     .check-btn {
-      width: 32px; height: 32px; border-radius: 50%; border: 2px solid #d4b87a;
-      background: #fefaf3; font-size: 1.1rem; display: flex; align-items: center;
+      width: 36px; height: 36px; border-radius: 50%; border: 2px solid #d4b87a;
+      background: #fefaf3; font-size: 1.2rem; display: flex; align-items: center;
       justify-content: center; cursor: pointer; color: #b89050; font-weight: 700;
       flex-shrink: 0; transition: all 0.2s;
     }
     .check-btn.completed { background: #7ab85c; border-color: #5a9440; color: white; }
-    .math-actions { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; padding-top: 6px; border-top: 1px dashed #e0cc9e; }
+    .delete-btn {
+      width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid #d4b87a;
+      background: #fefaf3; font-size: 0.75rem; display: flex; align-items: center;
+      justify-content: center; cursor: pointer; color: #b89050;
+      flex-shrink: 0; transition: all 0.2s; margin-left: 4px;
+      opacity: 0.5;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .delete-btn:active { background: #fde8e8; border-color: #d4786b; color: #d4786b; opacity: 1; }
+    .delete-btn.deleted { background: #e0e0e0; border-color: #999; color: #999; cursor: not-allowed; opacity: 0.3; }
+    .delete-btn:not(:hover):not(:active) { opacity: 0.4; }
+    .math-actions { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; padding-top: 8px; border-top: 1px dashed #e0cc9e; }
     .math-btn {
       background: linear-gradient(180deg, #fef5e2, #f7e1b8); border: 1px solid #c9a55c; border-radius: 10px;
-      padding: 5px 7px; font-weight: 600; cursor: pointer; font-size: 0.66rem;
+      padding: 6px 10px; font-weight: 600; cursor: pointer; font-size: 0.75rem;
       white-space: nowrap; text-align: center; color: #5c3d1e;
     }
     .math-btn:active { background: #f0d090; }
-    .math-preview-inline { display: none; background: #fafdf5; border-radius: 10px; padding: 7px; margin-top: 5px; border: 1px solid #d5e8b8; }
+    .math-preview-inline { display: none; background: #fafdf5; border-radius: 10px; padding: 8px; margin-top: 6px; border: 1px solid #d5e8b8; }
     .math-preview-inline.show { display: block; }
-    .math-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; }
-    .math-item { background: #fffefb; padding: 3px 2px; text-align: center; border-radius: 5px; font-size: 0.64rem; font-weight: 600; border: 1px solid #e0cc9e; color: #3d2815; }
+    .math-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .math-item { background: #fffefb; padding: 5px 2px; text-align: center; border-radius: 5px; font-size: 0.75rem; font-weight: 600; border: 1px solid #e0cc9e; color: #3d2815; }
 
     .cat-progress-box {
-      background: linear-gradient(135deg, #fef9f0, #fdf0d8); border-radius: 16px; padding: 14px;
+      background: linear-gradient(135deg, #fef9f0, #fdf0d8); border-radius: 16px; padding: 16px;
       margin: 8px 0 12px; border: 1px solid #e8d5b0; text-align: center;
       transition: all 0.4s ease;
     }
-    .cat-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 10px; }
+    .cat-row { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 10px; }
     .cat-container { flex-shrink: 0; animation: bounce 0.6s ease; }
     @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-    .cat-emoji { font-size: 2.8rem; display: block; line-height: 1; }
+    .cat-emoji { font-size: 3.2rem; display: block; line-height: 1; }
     .cat-text-group { text-align: left; flex: 1; }
-    .encouragement-text { font-weight: 700; font-size: 0.85rem; color: #5c3d1e; }
-    .encouragement-sub { font-size: 0.66rem; color: #8b6d4e; margin-top: 2px; }
-    .progress-inner { padding-top: 8px; border-top: 1px solid #e8d5b0; }
-    .progress-header { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.76rem; color: #5c3d1e; margin-bottom: 4px; }
-    .bar-bg { height: 10px; background: #e8d5b0; border-radius: 5px; overflow: hidden; }
-    .bar-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #e8a450, #d4892e); transition: 0.4s; border-radius: 5px; }
+    .encouragement-text { font-weight: 700; font-size: 1rem; color: #5c3d1e; }
+    .encouragement-sub { font-size: 0.78rem; color: #8b6d4e; margin-top: 2px; }
+    .progress-inner { padding-top: 10px; border-top: 1px solid #e8d5b0; }
+    .progress-header { display: flex; justify-content: space-between; font-weight: 700; font-size: 0.88rem; color: #5c3d1e; margin-bottom: 6px; }
+    .bar-bg { height: 12px; background: #e8d5b0; border-radius: 6px; overflow: hidden; }
+    .bar-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #e8a450, #d4892e); transition: 0.4s; border-radius: 6px; }
 
-    .action-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .action-row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
     .btn {
       background: linear-gradient(180deg, #fef5e2, #f7e1b8); border: 1px solid #c9a55c;
-      padding: 9px 16px; border-radius: 14px; font-weight: 700; cursor: pointer;
-      font-size: 0.74rem; color: #5c3d1e;
+      padding: 10px 18px; border-radius: 14px; font-weight: 700; cursor: pointer;
+      font-size: 0.85rem; color: #5c3d1e;
     }
     .btn:active { background: #f0d090; }
-    .analysis-panel { background: #fffefb; border-radius: 16px; padding: 12px; margin-top: 8px; border: 1px solid #e8d5b0; display: none; }
+    .analysis-panel { background: #fffefb; border-radius: 16px; padding: 14px; margin-top: 10px; border: 1px solid #e8d5b0; display: none; }
     .analysis-panel.show { display: block; }
-    .month-selector { display: flex; gap: 4px; align-items: center; margin: 6px 0; }
-    .task-filter { display: flex; flex-wrap: wrap; gap: 4px; margin: 8px 0; }
-    .filter-chip { background: #fdf3de; border: 1px solid #d4b87a; border-radius: 10px; padding: 4px 9px; font-size: 0.64rem; cursor: pointer; color: #5c3d1e; font-weight: 600; }
+    .month-selector { display: flex; gap: 8px; align-items: center; justify-content: center; margin: 4px 0 8px 0; }
+    .month-selector strong { font-size: 0.95rem; min-width: 80px; text-align: center; }
+    .month-selector .timer-btn { width: 36px; }
+    .summary-bar { background: #f8f2e8; border-radius: 10px; padding: 8px 12px; margin-bottom: 8px; text-align: center; font-size: 0.82rem; color: #5c3d1e; line-height: 1.6; }
+    .summary-bar b { color: #3d2815; }
+    .filter-area { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin: 6px 0 8px 0; }
+    .filter-chip {
+      background: #fdf3de; border: 1px solid #d4b87a; border-radius: 20px;
+      padding: 4px 12px; font-size: 0.7rem; cursor: pointer; color: #5c3d1e;
+      font-weight: 600; white-space: nowrap; transition: all 0.2s;
+    }
     .filter-chip.active { background: #e8a450; color: white; border-color: #c9802a; }
-    canvas { width: 100%; max-height: 240px; margin-top: 4px; background: #fffefb; border-radius: 10px; }
-    .legend { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; font-size: 0.64rem; }
-    .legend-item { display: flex; align-items: center; gap: 3px; }
-    .legend-color { width: 10px; height: 10px; border-radius: 2px; }
+    .legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 4px 0 6px 0; font-size: 0.7rem; }
+    .legend-item { display: flex; align-items: center; gap: 4px; }
+    .legend-color { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+    .chart-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    canvas { width: 100%; max-height: 220px; display: block; background: #fffefb; border-radius: 10px; border: 1px solid #f0e8d8; }
+    .footer-tip { text-align:center; margin-top:12px; color:#b8906e; font-size:0.75rem; }
   </style>
 </head>
 <body>
+
+<!-- ===== 封面页 ===== -->
+<div id="coverPage">
+  <span class="cover-deco deco1">🌸</span>
+  <span class="cover-deco deco2">🌻</span>
+  <span class="cover-deco deco3">✨</span>
+  <span class="cover-deco deco4">🌈</span>
+  <span class="cover-deco deco5">⭐</span>
+  <span class="cover-deco deco6">🎀</span>
+  <span class="cover-deco deco7">🌺</span>
+  <span class="cover-deco deco8">🦋</span>
+
+  <div class="cover-badge">☀️ 2026 暑期</div>
+  <div class="cover-cat-wrap">
+    <span class="cover-cat">🐱</span>
+    <span class="cat-bow">🎀</span>
+    <span class="cat-hearts heart1">❤️</span>
+    <span class="cat-hearts heart2">💕</span>
+    <span class="cat-hearts heart3">✨</span>
+  </div>
+  <div class="cover-title">
+    Echo的<br><span class="highlight">暑期打卡</span>
+  </div>
+  <div class="cover-sub">和小猫咪一起，每天进步一点点 ✨</div>
+  <div class="cover-stars">⭐ 🌟 ⭐ 🌟 ⭐</div>
+  <button class="cover-btn" id="enterBtn">
+    开始打卡 🚀
+    <span class="btn-shine"></span>
+  </button>
+  <div class="cover-foot">🐾 坚持就是胜利 🐾</div>
+</div>
+
+<!-- ===== 主应用 ===== -->
+<div id="mainApp">
 <div class="container" id="mainContainer">
   <h1>🌻 Echo 2026年暑期打卡</h1>
-  <div class="summer-badge">7.1 — 8.31</div>
+  <div class="summer-badge">6.24 — 8.28</div>
   <div class="date-box">
-    <span style="font-size:0.78rem;color:#8b6d4e;">📅</span>
+    <span style="font-size:0.9rem;color:#8b6d4e;">📅</span>
     <div class="date-nav"><button id="prevDay">◀</button><span id="currentDateDisplay"></span><button id="nextDay">▶</button></div>
     <button id="todayBtn">今天</button>
   </div>
   <div id="weekdayReminder" class="weekday-tip"></div>
   <div id="danceReminder" class="dance-tip"></div>
 
-  <!-- 猫咪框移到最上面 -->
   <div class="cat-progress-box" id="catProgressBox">
     <div class="cat-row">
       <div class="cat-container">
@@ -231,7 +463,6 @@
     </div>
   </div>
 
-  <!-- 计时器面板 -->
   <div class="timer-panel">
     <div class="timer-row">
       <div class="timer-left">
@@ -254,7 +485,7 @@
       </div>
       <div class="timer-right">
         <button class="timer-btn" style="visibility:hidden;"></button>
-        <button class="timer-btn" id="countdownBtn" style="width:44px;">开始</button>
+        <button class="timer-btn" id="countdownBtn" style="width:50px;">开始</button>
         <button class="timer-btn" style="visibility:hidden;"></button>
       </div>
     </div>
@@ -266,18 +497,104 @@
     <button class="btn" id="resetTodayBtn">🔄 重置今日</button>
   </div>
   <div id="analysisPanel" class="analysis-panel">
-    <div class="month-selector"><button id="prevMonthBtn" class="timer-btn">◀</button><strong id="analysisMonthLabel" style="font-size:0.78rem;"></strong><button id="nextMonthBtn" class="timer-btn">▶</button></div>
-    <div id="monthSummary" style="font-size:0.7rem;color:#5c3d1e;"></div>
-    <div class="task-filter" id="taskFilterContainer"></div>
+    <div class="month-selector">
+      <button id="prevMonthBtn" class="timer-btn">◀</button>
+      <strong id="analysisMonthLabel"></strong>
+      <button id="nextMonthBtn" class="timer-btn">▶</button>
+    </div>
+    <div class="summary-bar" id="monthSummary"></div>
+    <div class="filter-area" id="taskFilterContainer"></div>
     <div class="legend" id="legendContainer"></div>
-    <canvas id="monthChart"></canvas>
+    <div class="chart-wrap"><canvas id="monthChart"></canvas></div>
   </div>
-  <div style="text-align:center; margin-top:10px; color:#b8906e;font-size:0.64rem;">☀️ 户外至少3小时 · 坚持就是胜利</div>
+  <div class="footer-tip">☀️ 户外至少3小时 · 坚持就是胜利</div>
+</div>
 </div>
 
 <script>
 (function() {
-  const SUMMER_START='2026-07-01', SUMMER_END='2026-08-31';
+  // ===== 猫咪音效系统 =====
+  let audioCtx = null;
+  
+  function playMeowSound() {
+    try {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      const now = audioCtx.currentTime;
+      
+      const osc1 = audioCtx.createOscillator();
+      const gain1 = audioCtx.createGain();
+      osc1.connect(gain1);
+      gain1.connect(audioCtx.destination);
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(600, now);
+      osc1.frequency.exponentialRampToValueAtTime(900, now + 0.08);
+      osc1.frequency.exponentialRampToValueAtTime(700, now + 0.16);
+      gain1.gain.setValueAtTime(0.15, now);
+      gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+      osc1.start(now);
+      osc1.stop(now + 0.25);
+      
+      const osc2 = audioCtx.createOscillator();
+      const gain2 = audioCtx.createGain();
+      osc2.connect(gain2);
+      gain2.connect(audioCtx.destination);
+      osc2.type = 'sine';
+      osc2.frequency.setValueAtTime(550, now + 0.12);
+      osc2.frequency.exponentialRampToValueAtTime(850, now + 0.20);
+      osc2.frequency.exponentialRampToValueAtTime(650, now + 0.28);
+      gain2.gain.setValueAtTime(0.12, now + 0.12);
+      gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+      osc2.start(now + 0.12);
+      osc2.stop(now + 0.35);
+      
+      const osc3 = audioCtx.createOscillator();
+      const gain3 = audioCtx.createGain();
+      osc3.connect(gain3);
+      gain3.connect(audioCtx.destination);
+      osc3.type = 'sine';
+      osc3.frequency.setValueAtTime(1200, now + 0.05);
+      osc3.frequency.exponentialRampToValueAtTime(1000, now + 0.20);
+      gain3.gain.setValueAtTime(0.04, now + 0.05);
+      gain3.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+      osc3.start(now + 0.05);
+      osc3.stop(now + 0.25);
+      
+    } catch(e) {
+      // 静默处理音频错误
+    }
+  }
+
+  // ===== 封面进入逻辑 =====
+  const coverPage = document.getElementById('coverPage');
+  const mainApp = document.getElementById('mainApp');
+  const enterBtn = document.getElementById('enterBtn');
+
+  enterBtn.addEventListener('click', function(e) {
+    playMeowSound();
+    
+    this.style.transform = 'scale(0.94)';
+    setTimeout(() => {
+      this.style.transform = '';
+    }, 150);
+    
+    setTimeout(() => {
+      coverPage.classList.add('hidden');
+      mainApp.classList.add('show');
+      if (typeof renderAll === 'function') {
+        renderAll();
+      }
+    }, 150);
+  });
+
+  // ===== 以下是原有的主应用逻辑 =====
+  const SUMMER_START='2026-06-24', SUMMER_END='2026-08-28';
+  const OUTCLASS_CANCEL_START='2026-07-07';
+  const OUTCLASS_CANCEL_END='2026-07-20';
+  const DANCE_CANCEL_BEFORE='2026-07-04';
+  const DANCE_CANCEL_AFTER='2026-08-20';
+  
   const BASE_TASKS=[
     {id:'chinese_read_1',title:'语文阅读(一)',desc:'20分钟',emoji:'📘',cat:'chinese'},
     {id:'chinese_read_2',title:'语文阅读(二)',desc:'20分钟',emoji:'📘',cat:'chinese'},
@@ -293,14 +610,22 @@
     {id:'outdoor',title:'户外活动',desc:'至少3小时',emoji:'🌳',cat:'sport'}
   ];
   const OUTCLASS_TASK={id:'english_outclass',title:'外教课',desc:'25分钟',emoji:'🎓',cat:'outclass'}, OUTCLASS_DAYS=[1,2];
-  const DANCE_TASK={id:'dance',title:'舞蹈课',desc:'10:40-12:10·1.5小时',emoji:'💃',cat:'dance'};
-  const DANCE_BASIC_TASK={id:'dance_basic',title:'舞蹈基本功',desc:'18:30-20:00·1.5小时',emoji:'🩰',cat:'dance'};
+  const DANCE_TASK={id:'dance',title:'舞蹈课',desc:'1.5小时',emoji:'💃',cat:'dance'};
+  const DANCE_BASIC_TASK={id:'dance_basic',title:'舞蹈基本功',desc:'1.5小时',emoji:'🩰',cat:'dance'};
   const DANCE_DAYS={3:true,0:true}; const DANCE_BASIC_DAYS={4:true};
   const TASK_COLORS=['#5eac6b','#5eac6b','#9b7ec4','#5eac6b','#5eac6b','#5b9bd5','#5b9bd5','#5b9bd5','#e8a450','#e8a450','#d4786b','#d4786b','#d47b9a','#4da8b8'];
   const OUTCLASS_TIME={1:'外教课 19:30-19:55',2:'外教课 18:30-18:55'};
-  const STORAGE_DATA='echo_v87_catup', MATH_STORAGE_KEY='math_v80';
-  let currentDateStr=getTodayString(), analysisYearMonth='2026-07', selectedTaskFilters=['all'], timerInterval=null, timerSeconds=0, mathProblems=[];
-  const AudioContext=window.AudioContext||window.webkitAudioContext; let audioCtx=null;
+  const STORAGE_DATA='echo_v88_duration', MATH_STORAGE_KEY='math_v81';
+  let currentDateStr=getTodayString(), analysisYearMonth='2026-06', selectedTaskFilters=['all'], timerInterval=null, timerSeconds=0, mathProblems=[];
+  const AudioContext=window.AudioContext||window.webkitAudioContext; let mainAudioCtx=null;
+
+  function isInOutclassCancelPeriod(dateStr) {
+    return dateStr >= OUTCLASS_CANCEL_START && dateStr <= OUTCLASS_CANCEL_END;
+  }
+  
+  function isDanceCanceled(dateStr) {
+    return dateStr <= DANCE_CANCEL_BEFORE || dateStr >= DANCE_CANCEL_AFTER;
+  }
 
   function getCatEncouragement(completed, total) {
     const pct = total === 0 ? 0 : Math.round((completed / total) * 100);
@@ -315,16 +640,41 @@
 
   function getCatClass(cat){const m={english:'cat-english',chinese:'cat-chinese',calligraphy:'cat-calligraphy',math:'cat-math',sport:'cat-sport',dance:'cat-dance',outclass:'cat-outclass'};return m[cat]||'';}
   function getIdxClass(cat){const m={english:'idx-english',chinese:'idx-chinese',calligraphy:'idx-calligraphy',math:'idx-math',sport:'idx-sport',dance:'idx-dance',outclass:'idx-outclass'};return m[cat]||'';}
-  function formatDuration(min){if(min<60)return min+'分钟';let h=Math.floor(min/60),m=min%60;return m>0?h+'h'+m+'min':h+'h';}
-  function playGreatSound(){if(!audioCtx)audioCtx=new AudioContext();let now=audioCtx.currentTime;[0,0.1,0.2].forEach((d,i)=>{let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';let t=now+d;o.frequency.setValueAtTime(700+i*180,t);o.frequency.exponentialRampToValueAtTime(1000+i*180,t+0.07);g.gain.setValueAtTime(0.18,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.14);o.start(t);o.stop(t+0.14);});}
-  function playUncheckSound(){if(!audioCtx)audioCtx=new AudioContext();let now=audioCtx.currentTime,o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='sine';o.frequency.setValueAtTime(500,now);o.frequency.exponentialRampToValueAtTime(300,now+0.1);g.gain.setValueAtTime(0.12,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.14);o.start(now);o.stop(now+0.14);}
-  function playAlarmSound(){if(!audioCtx)audioCtx=new AudioContext();let now=audioCtx.currentTime;for(let i=0;i<5;i++){let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.connect(g);g.connect(audioCtx.destination);o.type='square';let t=now+i*0.28;o.frequency.setValueAtTime(800,t);o.frequency.setValueAtTime(600,t+0.1);g.gain.setValueAtTime(0.1,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.24);o.start(t);o.stop(t+0.24);}}
+  function formatDuration(min){if(min<60)return min+'分钟';let h=Math.floor(min/60),m=min%60;return m>0?h+'小时'+m+'分钟':h+'小时';}
+  function formatDurationLabel(min){
+    if(min < 1) return '0分';
+    let h = Math.floor(min / 60);
+    let m = Math.round(min % 60);
+    if(h === 0) return m + '分';
+    if(m === 0) return h + '小时';
+    return h + '小时' + m + '分';
+  }
+  function formatAxisLabel(min){
+    if(min < 1) return '0';
+    let h = Math.floor(min / 60);
+    let m = Math.round(min % 60);
+    if(h === 0) return m + '分';
+    if(m === 0) return h + 'h';
+    return h + 'h' + m + '分';
+  }
+  function playGreatSound(){if(!mainAudioCtx)mainAudioCtx=new AudioContext();let now=mainAudioCtx.currentTime;[0,0.1,0.2].forEach((d,i)=>{let o=mainAudioCtx.createOscillator(),g=mainAudioCtx.createGain();o.connect(g);g.connect(mainAudioCtx.destination);o.type='sine';let t=now+d;o.frequency.setValueAtTime(700+i*180,t);o.frequency.exponentialRampToValueAtTime(1000+i*180,t+0.07);g.gain.setValueAtTime(0.18,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.14);o.start(t);o.stop(t+0.14);});}
+  function playUncheckSound(){if(!mainAudioCtx)mainAudioCtx=new AudioContext();let now=mainAudioCtx.currentTime,o=mainAudioCtx.createOscillator(),g=mainAudioCtx.createGain();o.connect(g);g.connect(mainAudioCtx.destination);o.type='sine';o.frequency.setValueAtTime(500,now);o.frequency.exponentialRampToValueAtTime(300,now+0.1);g.gain.setValueAtTime(0.12,now);g.gain.exponentialRampToValueAtTime(0.01,now+0.14);o.start(now);o.stop(now+0.14);}
+  function playAlarmSound(){if(!mainAudioCtx)mainAudioCtx=new AudioContext();let now=mainAudioCtx.currentTime;for(let i=0;i<5;i++){let o=mainAudioCtx.createOscillator(),g=mainAudioCtx.createGain();o.connect(g);g.connect(mainAudioCtx.destination);o.type='square';let t=now+i*0.28;o.frequency.setValueAtTime(800,t);o.frequency.setValueAtTime(600,t+0.1);g.gain.setValueAtTime(0.1,t);g.gain.exponentialRampToValueAtTime(0.01,t+0.24);o.start(t);o.stop(t+0.24);}}
   function getTodayString(){let t=new Date(),s=formatDate(t);return s<SUMMER_START?SUMMER_START:s>SUMMER_END?SUMMER_END:s;}
   function formatDate(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
   function isDateInSummer(s){return s>=SUMMER_START&&s<=SUMMER_END;}
   function getWeekday(d){return new Date(d+'T00:00:00').getDay();}
-  function getTodayTasks(){let w=getWeekday(currentDateStr),t=[...BASE_TASKS];if(OUTCLASS_DAYS.includes(w))t.splice(5,0,OUTCLASS_TASK);if(DANCE_DAYS[w])t.push(DANCE_TASK);if(DANCE_BASIC_DAYS[w])t.push(DANCE_BASIC_TASK);return t;}
-  const storage={load(){try{return JSON.parse(localStorage.getItem(STORAGE_DATA))||{};}catch{return{};}},save(d){localStorage.setItem(STORAGE_DATA,JSON.stringify(d));},getDay(d){return this.load()[d]||{tasks:{}};},set(d,id,c,m){if(!isDateInSummer(d))return;let a=this.load();if(!a[d])a[d]={tasks:{}};a[d].tasks[id]={completed:c,minutes:m||0};this.save(a);},resetDay(d){let a=this.load();delete a[d];this.save(a);}};
+  function getTodayTasks(){
+    let w=getWeekday(currentDateStr), t=[...BASE_TASKS];
+    let shouldAddOutclass = OUTCLASS_DAYS.includes(w) && !isInOutclassCancelPeriod(currentDateStr);
+    if(shouldAddOutclass) t.splice(5,0,OUTCLASS_TASK);
+    let shouldAddDance = DANCE_DAYS[w] && !isDanceCanceled(currentDateStr);
+    let shouldAddDanceBasic = DANCE_BASIC_DAYS[w] && !isDanceCanceled(currentDateStr);
+    if(shouldAddDance) t.push(DANCE_TASK);
+    if(shouldAddDanceBasic) t.push(DANCE_BASIC_TASK);
+    return t;
+  }
+  const storage={load(){try{return JSON.parse(localStorage.getItem(STORAGE_DATA))||{};}catch{return{};}},save(d){localStorage.setItem(STORAGE_DATA,JSON.stringify(d));},getDay(d){return this.load()[d]||{tasks:{}};},set(d,id,c,m){if(!isDateInSummer(d))return;let a=this.load();if(!a[d])a[d]={tasks:{}};a[d].tasks[id]={completed:c,minutes:m||0};this.save(a);},resetDay(d){let a=this.load();delete a[d];this.save(a);},deleteTask(d,id){let a=this.load();if(a[d]&&a[d].tasks){delete a[d].tasks[id];this.save(a);}}};
   function getMathHistory(){try{return JSON.parse(localStorage.getItem(MATH_STORAGE_KEY))||{};}catch{return{};}}
   function saveMathHistory(h){localStorage.setItem(MATH_STORAGE_KEY,JSON.stringify(h));}
   function getMathForDate(d){let h=getMathHistory();return h[d]||null;}
@@ -374,69 +724,269 @@
   }
 
   function updateNavButtons(){prevBtn.disabled=(currentDateStr<=SUMMER_START);nextBtn.disabled=(currentDateStr>=SUMMER_END);}
-  function renderReminders(){let w=getWeekday(currentDateStr);let ot=OUTCLASS_TIME[w]||'';weekdayReminder.style.display=ot?'flex':'none';if(ot)weekdayReminder.innerHTML='📌 '+ot;let dt='';if(DANCE_DAYS[w])dt='💃 舞蹈课 10:40-12:10';if(DANCE_BASIC_DAYS[w])dt='🩰 舞蹈基本功 18:30-20:00';danceReminder.style.display=dt?'flex':'none';if(dt)danceReminder.innerHTML=dt;}
+  function renderReminders(){
+    let w=getWeekday(currentDateStr);
+    let shouldShowOutclass = OUTCLASS_DAYS.includes(w) && !isInOutclassCancelPeriod(currentDateStr);
+    let ot = shouldShowOutclass ? (OUTCLASS_TIME[w]||'') : '';
+    weekdayReminder.style.display=ot?'flex':'none';
+    if(ot) weekdayReminder.innerHTML='📌 '+ot;
+    let dt='';
+    let danceCanceled = isDanceCanceled(currentDateStr);
+    if(DANCE_DAYS[w] && !danceCanceled) dt='💃 舞蹈课 10:40-12:10';
+    if(DANCE_BASIC_DAYS[w] && !danceCanceled) dt='🩰 舞蹈基本功 18:30-20:00';
+    danceReminder.style.display=dt?'flex':'none';
+    if(dt) danceReminder.innerHTML=dt;
+  }
   function renderTasks(){
-    let dayData=storage.getDay(currentDateStr),tasksState=dayData.tasks||{},todayTasks=getTodayTasks();taskContainer.innerHTML='';
-    let completedCount = 0;
-    todayTasks.forEach((task,idx)=>{
-      let state=tasksState[task.id]||{completed:false,minutes:0},c=state.completed===true,m=state.minutes||0,isMath=task.id==='math_practice',isDance=task.id==='dance',isDanceBasic=task.id==='dance_basic',isOut=task.id==='english_outclass';
+    let dayData=storage.getDay(currentDateStr), tasksState=dayData.tasks||{}, todayTasks=getTodayTasks();
+    taskContainer.innerHTML='';
+    let completedCount = 0, totalCount = 0;
+    let activeTasks = todayTasks.filter(task => {
+      let state = tasksState[task.id];
+      return !(state && state.deleted === true);
+    });
+    activeTasks.forEach((task, idx)=>{
+      let state=tasksState[task.id]||{completed:false,minutes:0}, c=state.completed===true, m=state.minutes||0;
+      let isMath=task.id==='math_practice', isDance=task.id==='dance', isDanceBasic=task.id==='dance_basic', isOut=task.id==='english_outclass';
       if(c) completedCount++;
-      let catClass=getCatClass(task.cat||''),idxClass=getIdxClass(task.cat||'');
-      let card=document.createElement('div');card.className='task-card '+catClass+' '+(c?'completed-card':'incomplete-card');
-      let tag='';if(isOut)tag='<span style="font-size:0.55rem;color:#2d8a9a;">周一/周二</span>';if(isDance)tag='<span style="font-size:0.55rem;color:#b85a78;">周三/周日</span>';if(isDanceBasic)tag='<span style="font-size:0.55rem;color:#7b5ea7;">周四</span>';
-      card.innerHTML='<div class="task-main-row"><div class="task-index '+idxClass+'">'+(idx+1)+'</div><div class="task-details"><div class="task-title">'+task.emoji+' '+task.title+'</div><div class="task-desc">'+task.desc+' <span style="color:#b8906e;">'+tag+'</span></div></div><div class="time-input-area"><input type="number" class="time-input" value="'+(m||'')+'" min="0" data-task-id="'+task.id+'"><span style="font-size:0.6rem;color:#8b6d4e;">分</span></div><button class="check-btn '+(c?'completed':'')+'" data-task-id="'+task.id+'">'+(c?'✓':'○')+'</button></div>'+(isMath?'<div class="math-actions"><button class="math-btn math-preview-btn">👁 预览</button><button class="math-btn math-regenerate-btn">🎲 换题</button><button class="math-btn math-print-btn">🖨 打印</button></div><div class="math-preview-inline"><div class="math-grid" id="mathGridInline"></div></div>':'');
-      let cb=card.querySelector('.check-btn'),ti=card.querySelector('.time-input');
-      cb.addEventListener('click',e=>{e.stopPropagation();let nc=!c;storage.set(currentDateStr,task.id,nc,parseInt(ti.value,10)||0);nc?playGreatSound():playUncheckSound();renderAll();});
-      ti.addEventListener('change',()=>{storage.set(currentDateStr,task.id,c,parseInt(ti.value,10)||0);renderAll();});
-      if(isMath){let pb=card.querySelector('.math-preview-btn'),rb=card.querySelector('.math-regenerate-btn'),prb=card.querySelector('.math-print-btn'),pv=card.querySelector('.math-preview-inline');pb.addEventListener('click',e=>{e.stopPropagation();pv.classList.toggle('show');if(pv.classList.contains('show'))renderMathInline();});rb.addEventListener('click',e=>{e.stopPropagation();regenerateProblems();if(pv.classList.contains('show'))renderMathInline();rb.style.background='#f0d090';setTimeout(()=>rb.style.background='',300);});prb.addEventListener('click',e=>{e.stopPropagation();openPrintPreview();});}
+      totalCount++;
+      let catClass=getCatClass(task.cat||''), idxClass=getIdxClass(task.cat||'');
+      let card=document.createElement('div');
+      let isDeleted = state && state.deleted === true;
+      card.className='task-card '+catClass+' '+(isDeleted?'deleted-card':(c?'completed-card':'incomplete-card'));
+      let tag='';
+      if(isOut && !isInOutclassCancelPeriod(currentDateStr)) {
+        tag='<span style="font-size:0.65rem;color:#2d8a9a;">周一/周二</span>';
+      }
+      if(isDance && !isDanceCanceled(currentDateStr)) {
+        tag='<span style="font-size:0.65rem;color:#b85a78;">周三/周日</span>';
+      }
+      if(isDanceBasic && !isDanceCanceled(currentDateStr)) {
+        tag='<span style="font-size:0.65rem;color:#7b5ea7;">周四</span>';
+      }
+      
+      let deleteBtnHtml = `<button class="delete-btn" data-task-id="${task.id}" title="删除此任务（临时取消）">✕</button>`;
+      
+      card.innerHTML='<div class="task-main-row"><div class="task-index '+idxClass+'">'+(idx+1)+'</div><div class="task-details"><div class="task-title">'+task.emoji+' '+task.title+'</div><div class="task-desc">'+task.desc+' <span style="color:#b8906e;">'+tag+'</span></div></div><div class="time-input-area"><input type="number" class="time-input" value="'+(m||'')+'" min="0" data-task-id="'+task.id+'"><span style="font-size:0.7rem;color:#8b6d4e;">分</span></div><button class="check-btn '+(c?'completed':'')+'" data-task-id="'+task.id+'">'+(c?'✓':'○')+'</button>'+deleteBtnHtml+'</div>'+(isMath?'<div class="math-actions"><button class="math-btn math-preview-btn">👁 预览</button><button class="math-btn math-regenerate-btn">🎲 换题</button><button class="math-btn math-print-btn">🖨 打印</button></div><div class="math-preview-inline"><div class="math-grid" id="mathGridInline"></div></div>':'');
+      
+      let cb=card.querySelector('.check-btn'), ti=card.querySelector('.time-input'), delBtn=card.querySelector('.delete-btn');
+      
+      cb.addEventListener('click', e=>{
+        e.stopPropagation();
+        let nc=!c;
+        storage.set(currentDateStr, task.id, nc, parseInt(ti.value,10)||0);
+        nc?playGreatSound():playUncheckSound();
+        renderAll();
+      });
+      
+      ti.addEventListener('change', ()=>{
+        storage.set(currentDateStr, task.id, c, parseInt(ti.value,10)||0);
+        renderAll();
+      });
+      
+      delBtn.addEventListener('click', e=>{
+        e.stopPropagation();
+        if(confirm(`确定要删除"${task.title}"吗？\n（仅删除今日打卡，不影响其他日期）`)) {
+          storage.deleteTask(currentDateStr, task.id);
+          renderAll();
+        }
+      });
+      
+      if(isMath){
+        let pb=card.querySelector('.math-preview-btn'), rb=card.querySelector('.math-regenerate-btn'), prb=card.querySelector('.math-print-btn'), pv=card.querySelector('.math-preview-inline');
+        pb.addEventListener('click', e=>{e.stopPropagation(); pv.classList.toggle('show'); if(pv.classList.contains('show')) renderMathInline();});
+        rb.addEventListener('click', e=>{e.stopPropagation(); regenerateProblems(); if(pv.classList.contains('show')) renderMathInline(); rb.style.background='#f0d090'; setTimeout(()=>rb.style.background='',300);});
+        prb.addEventListener('click', e=>{e.stopPropagation(); openPrintPreview();});
+      }
       taskContainer.appendChild(card);
     });
-    progressText.textContent=completedCount+'/'+todayTasks.length;
-    progressFill.style.width=(completedCount/todayTasks.length*100)+'%';
-    updateCatEncouragement(completedCount, todayTasks.length);
+    progressText.textContent=completedCount+'/'+totalCount;
+    progressFill.style.width=(totalCount===0?0:completedCount/totalCount*100)+'%';
+    updateCatEncouragement(completedCount, totalCount);
   }
   function renderAll(){dateDisplay.textContent=currentDateStr.slice(5,7)+'月'+currentDateStr.slice(8,10)+'日';updateNavButtons();renderReminders();mathProblems=generateUniqueProblems(currentDateStr);renderTasks();}
   function changeDate(d){let dt=new Date(currentDateStr+'T00:00:00');dt.setDate(dt.getDate()+d);let ns=formatDate(dt);if(isDateInSummer(ns)){currentDateStr=ns;renderAll();}}
-  $('prevDay').addEventListener('click',()=>changeDate(-1));$('nextDay').addEventListener('click',()=>changeDate(1));$('todayBtn').addEventListener('click',()=>{currentDateStr=getTodayString();renderAll();});$('resetTodayBtn').addEventListener('click',()=>{if(confirm('重置今日？')){storage.resetDay(currentDateStr);renderAll();}});
+  $('prevDay').addEventListener('click',()=>changeDate(-1));$('nextDay').addEventListener('click',()=>changeDate(1));$('todayBtn').addEventListener('click',()=>{currentDateStr=getTodayString();renderAll();});$('resetTodayBtn').addEventListener('click',()=>{if(confirm('重置今日？将清除所有打卡数据！')){storage.resetDay(currentDateStr);renderAll();}});
   function getMonthDays(y,m){let d=new Date(y,m,0).getDate();return Array.from({length:d},(_,i)=>y+'-'+String(m).padStart(2,'0')+'-'+String(i+1).padStart(2,'0')).filter(isDateInSummer);}
   function getAllTasks(){return[...BASE_TASKS,OUTCLASS_TASK,DANCE_TASK,DANCE_BASIC_TASK];}
   function drawMultiChart(dates,ds){
     if(!chartCanvas||dates.length===0)return;let ctx=chartCanvas.getContext('2d');
-    chartCanvas.width=Math.max(340,window.innerWidth*0.9);chartCanvas.height=240;ctx.clearRect(0,0,chartCanvas.width,240);
-    let pad={top:36,right:14,bottom:36,left:38},cw=chartCanvas.width-pad.left-pad.right,ch=240-pad.top-pad.bottom,gm=1;
-    ds.forEach(s=>{let m=Math.max(...s.values,0);if(m>gm)gm=m;});
-    ctx.strokeStyle='#e0cc9e';ctx.lineWidth=0.5;
-    for(let i=0;i<=4;i++){let y=pad.top+(ch/4)*i;ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(chartCanvas.width-pad.right,y);ctx.stroke();ctx.fillStyle='#b8906e';ctx.font='9px sans-serif';ctx.fillText(Math.round(gm*(4-i)/4),2,y+4);}
+    let dpr = 1.5;
+    let w = Math.min(400, window.innerWidth * 0.92);
+    chartCanvas.width = w * dpr;
+    chartCanvas.height = 220 * dpr;
+    chartCanvas.style.width = w + 'px';
+    chartCanvas.style.height = '220px';
+    ctx.scale(dpr, dpr);
+    let cw = w, ch = 220;
+    ctx.clearRect(0, 0, cw, ch);
+    let pad={top:36,right:12,bottom:32,left:50}, cw2=cw-pad.left-pad.right, ch2=ch-pad.top-pad.bottom;
+    
+    // 计算最大值
+    let gm = 1;
+    ds.forEach(s=>{let m=Math.max(...s.values,0); if(m>gm) gm=m;});
+    // 如果最大值小于等于5，强制显示5个刻度（0,1,2,3,4,5）
+    // 否则自动计算
+    let maxVal = gm;
+    let step = 1;
+    if (maxVal > 5) {
+      // 自动计算步长
+      let rawStep = maxVal / 4;
+      if (rawStep <= 1) step = 1;
+      else if (rawStep <= 2) step = 2;
+      else if (rawStep <= 5) step = 5;
+      else if (rawStep <= 10) step = 10;
+      else if (rawStep <= 20) step = 20;
+      else if (rawStep <= 50) step = 50;
+      else step = 100;
+      maxVal = Math.ceil(maxVal / step) * step;
+    } else {
+      // 最大值小于等于5时，固定显示0,1,2,3,4,5
+      maxVal = 5;
+      step = 1;
+    }
+    if (maxVal < 1) maxVal = 1;
+    
+    // 绘制纵轴刻度
+    ctx.strokeStyle='#e0cc9e'; ctx.lineWidth=0.5;
+    let numTicks = Math.min(5, Math.ceil(maxVal / step));
+    if (maxVal <= 5) numTicks = 5;
+    for(let i=0; i<=numTicks; i++){
+      let val = (i / numTicks) * maxVal;
+      let y = pad.top + ch2 - (val / maxVal) * ch2;
+      ctx.beginPath();
+      ctx.moveTo(pad.left, y);
+      ctx.lineTo(cw - pad.right, y);
+      ctx.stroke();
+      ctx.fillStyle='#6b5a4a';
+      ctx.font='bold 11px sans-serif';
+      ctx.textAlign='right';
+      let label = formatAxisLabel(Math.round(val));
+      ctx.fillText(label, pad.left-6, y+4);
+    }
+    
+    // 绘制折线
     ds.forEach(s=>{
-      if(dates.length===0)return;let bw=Math.max(4,cw/dates.length-2);
-      ctx.fillStyle=s.color;ctx.strokeStyle=s.color;ctx.lineWidth=2;
+      if(dates.length===0)return;
+      let bw = Math.max(5, cw2/dates.length-3);
+      ctx.fillStyle=s.color; ctx.strokeStyle=s.color; ctx.lineWidth=2.5;
       ctx.beginPath();
       dates.forEach((d,i)=>{
-        let x=pad.left+i*(bw+2)+bw/2,h=(s.values[i]/gm)*ch,y=pad.top+ch-h;
-        i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+        let val = s.values[i] || 0;
+        let x = pad.left + i*(bw+3) + bw/2;
+        let h = (val / maxVal) * ch2;
+        let y = pad.top + ch2 - h;
+        i===0 ? ctx.moveTo(x,y) : ctx.lineTo(x,y);
       });
       ctx.stroke();
       dates.forEach((d,i)=>{
-        let x=pad.left+i*(bw+2)+bw/2,h=(s.values[i]/gm)*ch,y=pad.top+ch-h;
-        ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fillStyle=s.color;ctx.fill();
-        if(s.values[i]>0){
-          ctx.fillStyle='#3d2815';ctx.font='bold 10px sans-serif';
-          ctx.fillText(s.values[i],x-10,y-8);
+        let val = s.values[i] || 0;
+        let x = pad.left + i*(bw+3) + bw/2;
+        let h = (val / maxVal) * ch2;
+        let y = pad.top + ch2 - h;
+        ctx.beginPath();
+        ctx.arc(x, y, 4.5, 0, Math.PI*2);
+        ctx.fillStyle=s.color;
+        ctx.fill();
+        if(val > 0){
+          ctx.fillStyle='#2d1f0e';
+          ctx.font='bold 11px sans-serif';
+          ctx.textAlign='center';
+          let label = formatDurationLabel(val);
+          ctx.fillText(label, x, y-10);
         }
       });
     });
-    ctx.fillStyle='#8b6d4e';ctx.font='8px sans-serif';
-    dates.forEach((d,i)=>{if(i%Math.ceil(dates.length/10)===0){let bw=Math.max(4,cw/dates.length-2),x=pad.left+i*(bw+2)+bw/2;ctx.fillText(d.slice(-2),x-6,230);}});
-    ctx.fillText('分',2,20);
+    // X轴日期标签
+    ctx.fillStyle='#6b5a4a'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+    dates.forEach((d,i)=>{
+      if(i % Math.ceil(dates.length/10) === 0){
+        let bw = Math.max(5, cw2/dates.length-3);
+        let x = pad.left + i*(bw+3) + bw/2;
+        ctx.fillText(d.slice(-2), x, ch-4);
+      }
+    });
   }
-  function updateAnalysis(){let [y,m]=analysisYearMonth.split('-').map(Number);analysisMonthLabel.textContent=y+'年'+m+'月';let dates=getMonthDays(y,m),all=storage.load(),sh='';if(selectedTaskFilters.includes('all')){let tm=0,vals=dates.map(d=>{let tasks=all[d]?.tasks||{},w=getWeekday(d),dt=[...BASE_TASKS];if(OUTCLASS_DAYS.includes(w))dt.splice(5,0,OUTCLASS_TASK);if(DANCE_DAYS[w])dt.push(DANCE_TASK);if(DANCE_BASIC_DAYS[w])dt.push(DANCE_BASIC_TASK);let dm=0;dt.forEach(t=>{dm+=tasks[t.id]?.minutes||0;});tm+=dm;return dt.filter(t=>tasks[t.id]?.completed).length;}),sum=vals.reduce((a,b)=>a+b,0);sh='打卡 <b>'+sum+'</b> 次 · 日均 '+(sum/dates.length||0).toFixed(1)+' 项<br>时长 <b>'+formatDuration(tm)+'</b> ('+tm+'分)';drawMultiChart(dates,[{label:'全部',color:'#e8a450',values:vals}]);renderLegend([{label:'全部打卡',color:'#e8a450'}]);}else{let ds=[],li=[],ta=0;selectedTaskFilters.forEach(tid=>{let task=getAllTasks().find(t=>t.id===tid);if(!task)return;let vals=dates.map(d=>all[d]?.tasks?.[tid]?.minutes||0),sum=vals.reduce((a,b)=>a+b,0);ta+=sum;let col=TASK_COLORS[getAllTasks().indexOf(task)%TASK_COLORS.length];ds.push({label:task.title,color:col,values:vals});li.push({label:task.emoji+task.title,color:col});});sh='合计 <b>'+formatDuration(ta)+'</b> ('+ta+'分) · '+selectedTaskFilters.length+' 项';drawMultiChart(dates,ds);renderLegend(li);}monthSummary.innerHTML=sh;renderFilters();}
+  function updateAnalysis(){
+    let [y,m]=analysisYearMonth.split('-').map(Number);
+    analysisMonthLabel.textContent=y+'年'+m+'月';
+    let dates=getMonthDays(y,m), all=storage.load(), sh='';
+    if(selectedTaskFilters.includes('all')){
+      let totalDuration=0, durationVals=[];
+      dates.forEach(d=>{
+        let tasks=all[d]?.tasks||{};
+        let dayTotal=0;
+        Object.values(tasks).forEach(t=>{ dayTotal += t.minutes || 0; });
+        durationVals.push(dayTotal);
+        totalDuration += dayTotal;
+      });
+      let avg = dates.length > 0 ? Math.round(totalDuration / dates.length) : 0;
+      sh='📊 总时长 <b>'+formatDuration(totalDuration)+'</b> · 日均 <b>'+formatDuration(avg)+'</b>';
+      drawMultiChart(dates, [{label:'每日总时长', color:'#e8a450', values:durationVals}]);
+      renderLegend([{label:'每日总时长', color:'#e8a450'}]);
+    } else {
+      let ds=[], li=[], ta=0;
+      selectedTaskFilters.forEach(tid=>{
+        let task=getAllTasks().find(t=>t.id===tid);
+        if(!task) return;
+        let vals=dates.map(d=>all[d]?.tasks?.[tid]?.minutes||0);
+        let sum=vals.reduce((a,b)=>a+b,0);
+        ta+=sum;
+        let col=TASK_COLORS[getAllTasks().indexOf(task)%TASK_COLORS.length];
+        ds.push({label:task.title, color:col, values:vals});
+        li.push({label:task.emoji+task.title, color:col});
+      });
+      sh='合计 <b>'+formatDuration(ta)+'</b> · '+selectedTaskFilters.length+' 项';
+      drawMultiChart(dates, ds);
+      renderLegend(li);
+    }
+    monthSummary.innerHTML=sh;
+    renderFilters();
+  }
   function renderLegend(items){legendContainer.innerHTML='';items.forEach(i=>{let d=document.createElement('div');d.className='legend-item';d.innerHTML='<div class="legend-color" style="background:'+i.color+'"></div><span>'+i.label+'</span>';legendContainer.appendChild(d);});}
-  function toggleFilter(fid){if(fid==='all'){selectedTaskFilters=['all'];}else{selectedTaskFilters=selectedTaskFilters.filter(f=>f!=='all');let i=selectedTaskFilters.indexOf(fid);i>-1?selectedTaskFilters.splice(i,1):selectedTaskFilters.push(fid);if(selectedTaskFilters.length===0)selectedTaskFilters=['all'];}updateAnalysis();}
-  function renderFilters(){taskFilterContainer.innerHTML='';let ac=document.createElement('span');ac.className='filter-chip'+(selectedTaskFilters.includes('all')?' active':'');ac.textContent='全部';ac.addEventListener('click',()=>toggleFilter('all'));taskFilterContainer.appendChild(ac);getAllTasks().forEach(t=>{let c=document.createElement('span');c.className='filter-chip'+(selectedTaskFilters.includes(t.id)?' active':'');c.textContent=t.emoji+' '+t.title;c.addEventListener('click',()=>toggleFilter(t.id));taskFilterContainer.appendChild(c);});}
+  function toggleFilter(fid){
+    if(fid==='all'){
+      selectedTaskFilters=['all'];
+    } else {
+      selectedTaskFilters=selectedTaskFilters.filter(f=>f!=='all');
+      let i=selectedTaskFilters.indexOf(fid);
+      i>-1?selectedTaskFilters.splice(i,1):selectedTaskFilters.push(fid);
+      if(selectedTaskFilters.length===0) selectedTaskFilters=['all'];
+    }
+    updateAnalysis();
+  }
+  function renderFilters(){
+    taskFilterContainer.innerHTML='';
+    let ac=document.createElement('span');
+    ac.className='filter-chip'+(selectedTaskFilters.includes('all')?' active':'');
+    ac.textContent='📊 全部';
+    ac.addEventListener('click',()=>toggleFilter('all'));
+    taskFilterContainer.appendChild(ac);
+    getAllTasks().forEach(t=>{
+      let c=document.createElement('span');
+      c.className='filter-chip'+(selectedTaskFilters.includes(t.id)?' active':'');
+      c.textContent=t.emoji+' '+t.title;
+      c.addEventListener('click',()=>toggleFilter(t.id));
+      taskFilterContainer.appendChild(c);
+    });
+  }
   $('analysisBtn').addEventListener('click',()=>{if(analysisPanel.classList.contains('show'))analysisPanel.classList.remove('show');else{analysisPanel.classList.add('show');updateAnalysis();}});
-  $('prevMonthBtn').addEventListener('click',()=>{analysisYearMonth=analysisYearMonth==='2026-07'?'2026-08':'2026-07';updateAnalysis();});
-  $('nextMonthBtn').addEventListener('click',()=>{analysisYearMonth=analysisYearMonth==='2026-07'?'2026-08':'2026-07';updateAnalysis();});
-  renderAll();
+  $('prevMonthBtn').addEventListener('click',()=>{
+    if(analysisYearMonth === '2026-06') analysisYearMonth = '2026-08';
+    else if(analysisYearMonth === '2026-07') analysisYearMonth = '2026-06';
+    else if(analysisYearMonth === '2026-08') analysisYearMonth = '2026-07';
+    updateAnalysis();
+  });
+  $('nextMonthBtn').addEventListener('click',()=>{
+    if(analysisYearMonth === '2026-06') analysisYearMonth = '2026-07';
+    else if(analysisYearMonth === '2026-07') analysisYearMonth = '2026-08';
+    else if(analysisYearMonth === '2026-08') analysisYearMonth = '2026-06';
+    updateAnalysis();
+  });
+
+  if (coverPage.classList.contains('hidden')) {
+    renderAll();
+  }
 })();
 </script>
 </body>
